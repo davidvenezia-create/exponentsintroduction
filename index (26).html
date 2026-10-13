@@ -1,0 +1,1504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Exponent Lab</title>
+<meta name="description" content="Interactive exponents practice in English and Spanish: build powers, grow them, and use them in expressions.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#14213D">
+<meta property="og:title" content="Exponent Lab">
+<meta property="og:description" content="See what exponents mean, then use them.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2314213D'/%3E%3Ctext x='12' y='46' font-family='Arial' font-weight='900' font-size='40' fill='%23ffffff'%3E2%3C/text%3E%3Ctext x='38' y='30' font-family='Arial' font-weight='900' font-size='24' fill='%23FFD23F'%3E3%3C/text%3E%3C/svg%3E">
+<style>
+:root{
+  --ink:#14213D; --paper:#F2F7FC; --grid:#DCE6F2; --card:#FFFFFF; --line:#C3D2E6; --muted:#53637C;
+  --base:#1D4ED8; --base-soft:#DDE7FF; --exp:#C2185B; --exp-soft:#FCE0EC; --val:#0B7F5F; --val-soft:#D8F3EA;
+  --mark:#FFD23F; --mark-soft:#FFF3C4; --bad:#B42318; --bad-soft:#FDE7E4; --r:14px;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; color:var(--ink); background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:28px 28px;
+  font:17px/1.5 "Avenir Next","Trebuchet MS","Segoe UI",Roboto,system-ui,sans-serif;
+}
+h1,h2,h3,p{margin:0}
+h2{font-size:1.2rem;line-height:1.25;margin-bottom:10px}
+h3{font-size:1.02rem;line-height:1.3;margin-bottom:8px}
+button,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--base);outline-offset:2px}
+.app{max-width:980px;margin:0 auto;padding:16px 16px 48px}
+.muted{color:var(--muted)}
+.lead{font-size:1.08rem;margin-bottom:12px}
+[hidden]{display:none!important}
+
+/* header */
+.masthead{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;margin-bottom:12px}
+.brand{display:flex;gap:14px;align-items:center}
+.logo{display:grid;place-items:center;width:64px;height:64px;background:#fff;border:3px solid var(--ink);border-radius:14px;box-shadow:4px 4px 0 var(--ink);font-size:2rem}
+h1{font-size:clamp(1.7rem,5vw,2.6rem);line-height:1;font-weight:900;letter-spacing:-.02em}
+.sub{color:var(--muted);margin-top:4px}
+.lang{display:inline-flex;border:2px solid var(--ink);border-radius:999px;overflow:hidden;background:#fff}
+.lang button{border:0;background:transparent;padding:8px 16px;cursor:pointer;font-weight:700}
+.lang button[aria-pressed="true"]{background:var(--ink);color:#fff}
+
+/* student bar */
+.who{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:flex-end;background:#fff;border:2px solid var(--line);border-radius:var(--r);padding:10px 14px;margin-bottom:12px}
+.who label{display:flex;flex-direction:column;font-size:.85rem;font-weight:700;color:var(--muted);gap:2px}
+.who input{border:2px solid var(--line);border-radius:10px;padding:7px 10px;min-width:0;width:180px;color:var(--ink);font-weight:600}
+.who input#sPeriod{width:90px}
+#whoNote{font-size:.9rem;flex:1 1 220px}
+
+/* tabs */
+.tabs{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 10px;margin-bottom:6px;scrollbar-width:thin}
+.tab{flex:0 0 auto;border:2px solid var(--line);background:#fff;border-radius:999px;padding:9px 16px;cursor:pointer;font-weight:700;white-space:nowrap}
+.tab.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.tab:hover:not(.on){border-color:var(--ink)}
+
+/* cards */
+.card{background:var(--card);border:2px solid var(--line);border-radius:var(--r);padding:16px 18px;margin-bottom:14px}
+.card.inner{background:#FAFCFF;margin:14px 0 0}
+.card.stage{border-color:var(--ink);box-shadow:5px 5px 0 var(--ink)}
+.rowhead{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;margin-bottom:6px}
+.rowhead h2,.rowhead h3{margin:0}
+
+/* buttons */
+.btn{border:2px solid var(--ink);background:#fff;border-radius:12px;padding:9px 16px;cursor:pointer;font-weight:700;min-height:44px}
+.btn:hover:not(:disabled){background:var(--mark-soft)}
+.btn.primary{background:var(--ink);color:#fff}
+.btn.primary:hover:not(:disabled){background:#22335c}
+.btn.small{padding:5px 12px;min-height:36px;font-size:.92rem}
+.btn:disabled{opacity:.5;cursor:default}
+.chipbtn{border:2px solid var(--line);background:#fff;border-radius:999px;padding:7px 14px;cursor:pointer;font-weight:700;min-height:40px}
+.chipbtn.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.chipbtn.kb{color:var(--base);border-color:var(--base)} .chipbtn.ke{color:var(--exp);border-color:var(--exp)}
+.chipbtn.kp{color:var(--val);border-color:var(--val)} .chipbtn.kf{color:var(--ink);border-color:var(--ink)}
+.storypick,.defrow{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 10px}
+
+/* powers: base = blue, exponent = magenta, result = green */
+.pow{display:inline-flex;align-items:flex-start;font-weight:800;line-height:1}
+.pow .b{color:var(--base)}
+.pow sup.e{color:var(--exp);font-size:.62em;line-height:1;margin-left:.06em;margin-top:-.06em;vertical-align:baseline}
+.pow.big{font-size:5rem}
+.pow button{background:transparent;border:0;padding:0 .04em;cursor:pointer;font:inherit;border-radius:8px}
+.pow button.b{color:var(--base)} .pow button.e{color:var(--exp)}
+.pow.big button:hover,.pow.tapp button:hover{background:var(--mark-soft)}
+.pow.tapp{font-size:4rem}
+.pow.tapp button{border:3px dashed var(--line);padding:0 .15em;margin:0 .04em}
+.pow.tapp sup.e button{min-width:52px;min-height:52px}
+.pow.tapp button.right{border-color:var(--val);background:var(--val-soft)}
+.val{color:var(--val);font-weight:900}
+.k b,.kb{color:var(--base)} .ke{color:var(--exp)} .kp{color:var(--val)}
+strong.kb{color:var(--base)} strong.ke{color:var(--exp)} strong.kp{color:var(--val)} strong.kf{color:var(--ink)}
+
+/* steppers */
+.ctrls{display:flex;flex-wrap:wrap;gap:14px 28px;margin:6px 0 4px}
+.stepper{display:flex;flex-direction:column;align-items:flex-start;gap:4px}
+.slabel{font-weight:800}
+.stepper.sb .slabel{color:var(--base)} .stepper.se .slabel{color:var(--exp)}
+.sctl{display:inline-flex;align-items:center;border:2px solid var(--ink);border-radius:14px;overflow:hidden;background:#fff}
+.sbtn{width:52px;height:52px;border:0;background:transparent;font-size:1.6rem;font-weight:800;cursor:pointer}
+.sbtn:hover{background:var(--mark-soft)}
+.sctl output{min-width:52px;text-align:center;font-size:1.7rem;font-weight:900;font-variant-numeric:tabular-nums}
+.stepper.sb output{color:var(--base)} .stepper.se output{color:var(--exp)}
+
+/* build tab */
+.bigpow{display:flex;flex-wrap:wrap;align-items:center;gap:6px 26px;margin:18px 0 6px}
+.bigpow .bp{font-size:clamp(4.2rem,15vw,7rem);line-height:1}
+.bigpow .eq{font-size:clamp(2.4rem,8vw,4rem);font-weight:900;color:var(--ink)}
+.bigpow .val{background:linear-gradient(transparent 58%,var(--mark) 58%);padding:0 .1em}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.tag{border-radius:10px;padding:5px 11px;font-size:.92rem}
+.tag.tb{background:var(--base-soft);color:var(--base)} .tag.te{background:var(--exp-soft);color:var(--exp)}
+.say{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.saytxt{font-size:1.35rem;font-weight:800}
+.alt{margin-top:2px}
+.chain{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center;font-size:1.6rem;font-weight:900;margin:6px 0 8px}
+.chip{display:inline-grid;place-items:center;min-width:46px;height:46px;padding:0 10px;border:3px solid var(--base);background:var(--base-soft);color:var(--base);border-radius:12px;animation:pop .22s ease-out}
+.times{color:var(--muted);font-weight:700}
+.warn{background:var(--mark-soft);border-left:5px solid var(--mark);padding:8px 12px;border-radius:8px;font-size:.98rem}
+.ladder{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:8px}
+.lrow{display:grid;grid-template-columns:76px minmax(120px,1.1fr) minmax(80px,1.6fr) auto;gap:6px 12px;align-items:center}
+.lrow .lp{font-size:1.5rem}
+.lrow .lm{font-variant-numeric:tabular-nums}
+.lrow .lv{font-weight:900;color:var(--val);min-width:60px;text-align:right;font-variant-numeric:tabular-nums}
+.lbar,.gbar{display:block;height:16px;background:var(--base-soft);border-radius:8px;overflow:hidden}
+.lbar i,.gbar i{display:block;height:100%;background:var(--base);border-radius:8px}
+.lrow.hid{visibility:hidden}
+.lrow.flash{animation:flash 1s ease-out}
+.blocks{display:flex;flex-wrap:wrap;gap:12px;margin:8px 0 6px}
+.lay{display:grid;gap:2px;padding:4px;background:var(--base-soft);border-radius:8px}
+.lay i{background:var(--base);border-radius:2px}
+.lay.s1 i{background:#4C78EE} .lay.s2 i{background:#86A6FA}
+.cap{color:var(--muted);font-size:.95rem}
+
+/* words tab */
+.anat{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center}
+.anat-pow{padding:6px 14px}
+.defbox{background:#FAFCFF;border:2px dashed var(--line);border-radius:12px;padding:12px 14px;min-height:76px;display:flex;align-items:center}
+.tablewrap{overflow-x:auto}
+.saytable{border-collapse:collapse;width:100%}
+.saytable th{text-align:left;font-size:.9rem;color:var(--muted);border-bottom:2px solid var(--line);padding:6px 10px}
+.saytable td{padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:middle}
+.saytable td:first-child{font-size:1.5rem}
+.alt2{display:block;font-size:.88rem;color:var(--muted)}
+.chaincell{font-weight:800;white-space:nowrap}
+.cb{color:var(--base)}
+
+/* quiz engine */
+.quiz{min-height:200px}
+.qhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.qcount{font-weight:800;color:var(--muted)}
+.dots{display:inline-flex;gap:6px}
+.dots i{width:12px;height:12px;border-radius:50%;border:2px solid var(--ink);background:#fff}
+.dots i.done{background:var(--ink)} .dots i.cur{background:var(--mark)}
+.qprompt{font-size:1.2rem;font-weight:700;margin-bottom:12px}
+.chainbig,.exprbig{font-size:2.3rem;font-weight:800;display:inline-block;margin-top:4px}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px}
+.opt{border:2px solid var(--ink);background:#fff;border-radius:12px;padding:12px 14px;cursor:pointer;font-size:1.15rem;font-weight:700;min-height:56px;text-align:center;display:flex;align-items:center;justify-content:center}
+.opt:hover:not(:disabled){background:var(--mark-soft)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-soft);opacity:.75}
+.opt.right{border-color:var(--val);background:var(--val-soft);opacity:1}
+.tapbox{padding:4px 0 10px}
+.numrow,.pairrow{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end}
+.numin{border:2px solid var(--ink);border-radius:12px;padding:9px 12px;font-size:1.3rem;font-weight:800;width:150px;font-variant-numeric:tabular-nums}
+.numin.small{width:86px}
+.lblb,.lble{display:flex;flex-direction:column;font-size:.9rem;font-weight:800;gap:2px}
+.lblb{color:var(--base)} .lble{color:var(--exp)}
+.lblb input{border-color:var(--base)} .lble input{border-color:var(--exp)}
+.calc{font-size:1.4rem;font-weight:800;display:inline-flex;align-items:center;gap:6px}
+.fb{margin-top:12px;border-radius:12px;padding:10px 14px;border-left:6px solid transparent}
+.fb:empty{display:none}
+.fb.good{background:var(--val-soft);border-color:var(--val)}
+.fb.bad{background:var(--bad-soft);border-color:var(--bad)}
+.fb.hint{background:var(--mark-soft);border-color:var(--mark)}
+.fb.reveal{background:var(--base-soft);border-color:var(--base)}
+.qactions{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+.arrow{color:var(--muted);margin:0 4px}
+.sum{text-align:center;padding:10px 0}
+.bigstars{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:10px 0;font-size:1.7rem;color:#E0A100}
+.sum .qactions{justify-content:center}
+.lvlgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.lvl{display:flex;flex-direction:column;align-items:flex-start;gap:4px;text-align:left;border:2px solid var(--ink);background:#fff;border-radius:var(--r);padding:14px 16px;cursor:pointer}
+.lvl:hover{background:var(--mark-soft)}
+.lvlnum{font-size:2.2rem;font-weight:900;color:var(--exp);line-height:1}
+.lvlname{font-weight:800;font-size:1.1rem}
+.lvldesc{color:var(--muted)}
+
+/* grow tab */
+.storytext{margin-top:4px}
+.ghead{font-size:clamp(1.5rem,5vw,2.2rem);font-weight:900;display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;margin-bottom:6px}
+.ghead small{font-size:1rem;font-weight:700;color:var(--muted)}
+.sliderlab{display:flex;align-items:center;gap:12px;font-weight:800;margin:6px 0 12px}
+.sliderlab input{flex:1;accent-color:var(--exp);height:32px}
+.growlist{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+.grow-row{display:grid;grid-template-columns:78px 82px minmax(60px,1fr) minmax(70px,auto);gap:4px 10px;align-items:center;padding:4px 8px;border-radius:10px}
+.grow-row.cur{background:var(--mark-soft);outline:2px solid var(--mark)}
+.grow-row.future{opacity:.5}
+.gp{font-size:1.3rem}
+.gv{font-weight:900;color:var(--val);text-align:right;font-variant-numeric:tabular-nums}
+.gv small{color:var(--muted);font-weight:700}
+.gbar.add i{background:#8896AD} .gbar.add{background:#E8EDF4}
+.gbar.mul i{background:var(--exp)} .gbar.mul{background:var(--exp-soft)}
+.cmp2{display:grid;gap:12px}
+.cmprow{display:grid;gap:4px}
+.cl{font-weight:700}
+
+/* rules tab */
+.zlist{list-style:none;margin:8px 0;padding:0;display:grid;gap:2px}
+.zrow{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;padding:6px 12px;border-radius:10px;background:#FAFCFF;border:2px solid var(--line)}
+.zrow.ask{border-color:var(--exp);background:var(--exp-soft)}
+.zrow.solved{border-color:var(--val);background:var(--val-soft)}
+.zp{font-size:1.7rem;min-width:84px}
+.zeq{font-size:1.4rem;font-weight:900;font-variant-numeric:tabular-nums}
+.znote{color:var(--muted);font-size:.92rem}
+.zdiv{color:var(--exp);font-weight:800;padding-left:34px;font-size:.95rem}
+.tenrow{font-size:clamp(1.6rem,5vw,2.4rem);font-weight:900;display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;margin:10px 0 4px}
+.tennum{letter-spacing:.04em;font-variant-numeric:tabular-nums}
+.tennum .z{color:var(--exp);background:var(--exp-soft);border-radius:6px;padding:0 3px;margin:0 1px}
+.eqs{color:var(--muted)}
+.chal summary{cursor:pointer;font-weight:800;font-size:1.1rem}
+.chal[open] summary{margin-bottom:8px}
+.cmpgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px;margin:12px 0}
+.cmpcell{border:2px solid var(--line);border-radius:12px;padding:12px 14px}
+.cmph{font-size:2rem;font-weight:800;margin-bottom:4px}
+.cmpb{font-size:1.2rem;font-weight:800}
+
+/* order tab */
+.rank{display:flex;flex-wrap:wrap;gap:8px;list-style:none;padding:0;margin:0 0 10px;counter-reset:r}
+.rank li{background:#FAFCFF;border:2px solid var(--line);border-radius:10px;padding:5px 12px;font-weight:700}
+.rank li.r2{border-color:var(--exp);color:var(--exp)}
+.rank b{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--ink);color:#fff;font-size:.85rem;margin-right:6px}
+.exprbox{font-size:clamp(1.9rem,6vw,2.8rem);font-weight:800;display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;padding:8px 0 14px;min-height:80px}
+.tn{padding:0 2px}
+.top{color:var(--ink)}
+.grp{color:var(--muted);font-weight:500}
+.tk{cursor:pointer;border-radius:10px;padding:2px 8px;border:3px solid transparent;background:#F3F6FB}
+.tk:hover{background:var(--mark-soft);border-color:var(--mark)}
+.tk.op{min-width:44px;text-align:center}
+.pending{background:var(--mark)!important;border-radius:10px;padding:2px 8px}
+.hint.tk,.tk.hint{border-color:var(--mark);box-shadow:0 0 0 5px rgba(255,210,63,.55);animation:glow 1s ease-in-out 3}
+.oprompt{font-weight:700;color:var(--muted)}
+.answerline{font-size:1.6rem;font-weight:900}
+.starz{color:#E0A100;margin-left:8px}
+
+@keyframes pop{from{transform:scale(.6);opacity:0}to{transform:none;opacity:1}}
+@keyframes flash{from{background:var(--mark)}to{background:transparent}}
+@keyframes glow{50%{box-shadow:0 0 0 9px rgba(255,210,63,.25)}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media (max-width:640px){
+  .app{padding:12px 12px 40px}
+  .anat{grid-template-columns:1fr}
+  .lrow{grid-template-columns:64px 1fr auto}
+  .lrow .lbar{grid-column:1 / -1;grid-row:2}
+  .grow-row{grid-template-columns:62px 70px 1fr auto}
+  .pow.big{font-size:4rem}
+  .who input,.who input#sPeriod{width:100%}
+  .who label{flex:1 1 120px}
+}
+
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="masthead">
+    <div class="brand">
+      <span class="logo" aria-hidden="true"><span class="pow"><span class="b">2</span><sup class="e">3</sup></span></span>
+      <div><h1 data-i18n="title">Exponent Lab</h1><p class="sub" data-i18n="subtitle"></p></div>
+    </div>
+    <div class="lang" role="group" aria-label="Language / Idioma">
+      <button type="button" data-lang="en" aria-pressed="true">English</button>
+      <button type="button" data-lang="es" aria-pressed="false">Espa&ntilde;ol</button>
+    </div>
+  </header>
+
+  <section class="who" aria-label="Student">
+    <label><span data-i18n="whoName">Name</span><input id="sName" type="text" autocomplete="off" data-i18n-ph="namePh"></label>
+    <label><span data-i18n="whoPeriod">Period</span><input id="sPeriod" type="text" autocomplete="off" data-i18n-ph="periodPh"></label>
+    <button type="button" class="btn small" id="sReset" data-i18n="whoNew">New student</button>
+    <p id="whoNote" class="muted"></p>
+  </section>
+
+  <nav id="tabs" class="tabs" role="tablist"></nav>
+
+  <main>
+    <section class="panel" id="p-build" role="tabpanel" aria-labelledby="tab-build"></section>
+    <section class="panel" id="p-words" role="tabpanel" aria-labelledby="tab-words" hidden></section>
+    <section class="panel" id="p-grow" role="tabpanel" aria-labelledby="tab-grow" hidden></section>
+    <section class="panel" id="p-rules" role="tabpanel" aria-labelledby="tab-rules" hidden></section>
+    <section class="panel" id="p-order" role="tabpanel" aria-labelledby="tab-order" hidden></section>
+    <section class="panel" id="p-practice" role="tabpanel" aria-labelledby="tab-practice" hidden></section>
+  </main>
+</div>
+
+<script>
+(function(){
+'use strict';
+/* =====================================================================
+   Text in English and Spanish. Keys must match in both languages.
+   ===================================================================== */
+var I18N = {
+en: {
+  title: "Exponent Lab",
+  subtitle: "See what exponents mean, then use them.",
+  whoName: "Name", whoPeriod: "Period", namePh: "Your name", periodPh: "e.g. 3", whoNew: "New student",
+  whoNone: "Type your name first so your teacher can see your work.", whoHas: "Your teacher can see your work.",
+  tabBuild: "Build it", tabWords: "Say it", tabGrow: "Watch it grow", tabRules: "Special cases", tabOrder: "Order of operations", tabPractice: "Practice",
+  base: "Base", exponent: "Exponent", baseDef: "the number you multiply", expDef: "how many times the base is a factor", listen: "Listen",
+
+  buildLead: "Pick a base and an exponent. The exponent tells you how many copies of the base to multiply.",
+  factorsTitle: "Factors of {b}: {e}", ladderTitle: "Multiply by {b}, again and again", watch: "Watch it build", oneFactor: "just {b}",
+  blocksTitle: "Picture it", noBlocks: "Exponents bigger than 3 are too big for a flat picture. Use the ladder above.",
+  capE1: "{b} blocks in a row. One factor of {b}.", capE2: "{b} rows of {b} blocks = {v} blocks", capE3: "{b} layers, each with {b} rows of {b} blocks = {v} blocks",
+  noteE1: "An exponent of 1 means one factor: {b}¹ is just {b}.",
+  noteSame: "{pow} means {b} used {e} times as a factor. Here it happens to equal {b} × {e} = {prod}, but that is luck. It is not the rule.",
+  noteNot: "{pow} is NOT {b} × {e} = {prod}. It is {b} multiplied {e} times = {val}.",
+  alsoSay: "You can also say: {alt}",
+
+  anatomyTitle: "Parts of a power", anatomyPrompt: "Tap the base, the exponent, or a word below.",
+  term_b: "base", term_e: "exponent", term_p: "power", term_f: "factor",
+  defBase: "The big number. It is the number you multiply.",
+  defExp: "The small number up high. It tells how many times the base is used as a factor.",
+  defPower: "The whole expression, like 5³. It can also mean the answer: 125 is a power of 5.",
+  defFactor: "A number you multiply. In 5 × 5 × 5, each 5 is a factor.",
+  sayTitle: "How to say it", thWrite: "Write", thSay: "Say", thMeans: "It means", wordsQuizTitle: "Quick questions",
+  qTapBase: "Tap the base.", qTapExp: "Tap the exponent.", hTapBase: "The base is the big number.", hTapExp: "The exponent is the small number up high.",
+  fbTapBase: "That is the exponent. Try the other one.", fbTapExp: "That is the base. Try the other one.",
+  exTapBase: "The base is {b}. It is the number being multiplied in {pow}.", exTapExp: "The exponent is {e}. It says how many times to use the base in {pow}.",
+  qHowMany: "In {pow}, how many times is {b} used as a factor?", hHowMany: "Look at the small number up high.",
+  fbChoseBase: "{b} is the base, not the count. Look at the exponent.", fbChoseValue: "That is the answer to the multiplication. The question asks how many factors there are.",
+  exHowMany: "{pow} = {chain}. That is {e} factors of {b}.",
+  qRead: "Which words match {pow}?", readTimes: "{b} times {e}", hRead: "Say the base first, then the exponent.",
+  fbSwapped: "Those numbers are swapped. The base comes first.", exRead: "{pow} is read “{say}”.",
+  qWrite: "Which one is “{say}”?", hWrite: "The base is the big number. The exponent is the small number up high.", exWrite: "“{say}” is written {pow}.",
+  fbNotTimes: "{pow} is not {b} × {e} = {prod}. The exponent counts how many times to use {b} as a factor.",
+
+  qOf: "Question {n} of {total}", hint: "Hint", check: "Check", next: "Next", finishRound: "See my stars", tryAgain: "Not quite. Try again.",
+  right: "Yes!", showAnswer: "Here is how it works:", roundDone: "Round complete", sumLine: "You earned {s} of {m} stars.", again: "Play again",
+  typeNumber: "Type a whole number.", typeBoth: "Type both a base and an exponent.", answerLabel: "Your answer",
+
+  growLead: "Powers grow fast. Pick a story and move the slider.", pickStory: "Choose a story",
+  story_plant_title: "Magic plant", story_plant_text: "A magic plant doubles its leaves every day. It starts with 1 leaf on day 0.", story_plant_unit: "leaves", story_plant_step: "Day", story_plant_stepl: "day", story_plant_each: "each day",
+  story_msg_title: "Group chat", story_msg_text: "You send a message to 3 friends. Each friend sends it to 3 new friends, and so on. Round 0 is just you: 1 person.", story_msg_unit: "people", story_msg_step: "Round", story_msg_stepl: "round", story_msg_each: "each round",
+  story_ten_title: "Place value", story_ten_text: "Start with 1. Every step makes the number 10 times bigger.", story_ten_unit: "", story_ten_step: "Step", story_ten_stepl: "step", story_ten_each: "each step",
+  cmpTitle: "Adding vs. multiplying", cmpWait: "Move the slider to 2 or more to compare.",
+  cmpAdd: "Adding {b} {each}: {b} × {n} = {v}", cmpMul: "Multiplying by {b} {each}: {pow} = {v}",
+  predictTitle: "Predict first", predictQ: "Predict: what number will you have at “{step} {n}”? Type your guess, then press Check.",
+  growLow: "Too low.", growHigh: "Too high.", growHint: "Start at 1 and multiply by {b} each time.", growExplain: "{pow} = {chain} = {v}",
+
+  zeroTitle: "What about an exponent of 0?", zeroLead: "Look for the pattern. Each row divides the row above it by the base.",
+  zeroNext: "Divide by {b}", zeroAsk: "What comes next? (Divide by {b})", zeroOne: "One factor: it is just the base.",
+  zeroNotZero: "Not 0. Divide the last row by {b} again: {b} ÷ {b} = ?", zeroTry: "Follow the pattern. The last row was {b}. What is {b} ÷ {b}?",
+  zeroRule: "Any number (except 0) to the power of 0 equals 1. Dividing {b} by {b} leaves 1.",
+  tenTitle: "Powers of 10", tenZeros: "The exponent {n} tells you how many zeros come after the 1: {n} zeros.",
+  oneTitle: "Powers of 1", oneText: "1 times itself is always 1, so 1 to any power is 1. Example: {ex}",
+  chalTitle: "Challenge: negative bases", chalLead: "Parentheses decide what gets multiplied. Compare these two.",
+  negWhy1: "The parentheses make the whole negative number the base.", negWhy2: "No parentheses: only the base is multiplied. The negative sign waits until the end.",
+  negRule: "A negative base gives a positive answer when the exponent is even, and a negative answer when it is odd.",
+
+  orderLead: "Click the part you should do first. Then work it out. Same level? Go left to right.",
+  rank1: "Parentheses ( )", rank2: "Exponents", rank3: "Multiplication ×", rank4: "Addition + and subtraction −", level: "Level",
+  oClick: "Click the part to do first.",
+  oWhy_pow: "Exponents come before multiplying, adding and subtracting.", oWhy_mul: "Multiplication comes before adding and subtracting.", oWhy_add: "Only adding and subtracting are left. Go left to right.",
+  "oFb_skipped-parentheses": "Look inside the parentheses first. Work there before anything else.",
+  "oFb_skipped-exponent": "Exponents come before ×, + and −. Find the exponent.",
+  "oFb_skipped-multiplication": "Multiply before you add or subtract.",
+  "oFb_wrong-order-left-to-right": "Same level? Go left to right. Find the first one on the left.",
+  oHint_pow: "Do the exponent next. Look at the glowing part.", oHint_mul: "Multiply next. Look at the glowing part.", oHint_add: "Add or subtract next, left to right. Look at the glowing part.",
+  oValPow: "Multiply the base by itself: {chain}", oValOp: "Check your arithmetic and try again.", oDone: "Finished! Look at your answer.", oAnswer: "Answer:",
+  oNext: "Next problem", oShow: "Show me", oNew: "New problem",
+
+  practiceLead: "Choose a level. Each level has 6 questions.",
+  lvl1: "Powers and factors", lvl1d: "Write powers. Expand them.", lvl2: "Find the value", lvl2d: "Work out powers. Compare them.", lvl3: "Expressions", lvl3d: "Use the order of operations.",
+  chooseLevel: "Choose level", nextLevel: "Next level",
+  qPair: "Write {chain} as a power.", hPair: "Count how many times {b} appears. That number is the exponent.",
+  fbCountFactors: "Count how many times {b} appears. That count is the exponent.", fbWrongBase: "Check the base. It is the number being multiplied.", fbWroteValue: "That is the value. Here, write the base and the exponent.",
+  exPair: "{chain} = {pow}. The base is {b} and the exponent is {e}.",
+  qExpand: "Which one shows {pow} as repeated multiplication?", hExpand: "Use the base as a factor as many times as the exponent says.",
+  fbNotAdd: "Exponents mean multiplying, not adding.", exExpand: "{pow} = {chain}.",
+  qValue: "What is {pow}?", hValue: "Write it as repeated multiplication: {chain}",
+  fbTryLadder: "Not quite. Multiply one factor at a time. The ladder on the “Build it” tab can help.",
+  fbOneShort: "That is one factor short. The exponent {e} means {e} factors.", fbOneExtra: "That is one factor too many. The exponent {e} means {e} factors.",
+  fbAdded: "You added the base and the exponent. Multiply the base by itself instead.", exValue: "{chain} = {val}",
+  qCompare: "Which is greater?", equalWord: "They are equal", hCompare: "Work out each value first, then compare.",
+  fbCompareBase: "The bigger base does not always win. Work out both values.", fbCompareExp: "The bigger exponent does not always win. Work out both values.",
+  fbCompareCalc: "Work out both values and compare them.", exCompare: "{a} = {va} and {b} = {vb}.",
+  qEval: "Evaluate: {expr}", hOrder: "Parentheses, then exponents, then multiply, then add or subtract.",
+  fbOrderGeneric: "Not quite. Go step by step: parentheses, exponents, multiply, then add or subtract.",
+  "fb_added-first": "You added too early. Exponents and multiplying come before adding.",
+  "fb_base-times-exp": "You multiplied the base by the exponent. An exponent means multiplying the base by itself.",
+  "fb_multiplied-first": "You multiplied before the exponent. Exponents come first.",
+  "fb_exp-each": "You put the exponent on each number inside the parentheses. Work inside the parentheses first, then use the exponent.",
+  exExpr: "{steps}"
+},
+es: {
+  title: "Laboratorio de exponentes",
+  subtitle: "Mira qué significan los exponentes y luego úsalos.",
+  whoName: "Nombre", whoPeriod: "Período", namePh: "Tu nombre", periodPh: "p. ej. 3", whoNew: "Nuevo estudiante",
+  whoNone: "Escribe tu nombre primero para que tu maestro vea tu trabajo.", whoHas: "Tu maestro puede ver tu trabajo.",
+  tabBuild: "Constrúyelo", tabWords: "Dilo", tabGrow: "Mira cómo crece", tabRules: "Casos especiales", tabOrder: "Orden de operaciones", tabPractice: "Práctica",
+  base: "Base", exponent: "Exponente", baseDef: "el número que se multiplica", expDef: "cuántas veces la base es un factor", listen: "Escuchar",
+
+  buildLead: "Elige una base y un exponente. El exponente dice cuántas copias de la base se multiplican.",
+  factorsTitle: "Factores de {b}: {e}", ladderTitle: "Multiplica por {b}, una y otra vez", watch: "Míralo construirse", oneFactor: "solo {b}",
+  blocksTitle: "Imagínalo", noBlocks: "Los exponentes mayores que 3 son demasiado grandes para un dibujo plano. Usa la escalera de arriba.",
+  capE1: "{b} bloques en una fila. Un factor de {b}.", capE2: "{b} filas de {b} bloques = {v} bloques", capE3: "{b} capas, cada una con {b} filas de {b} bloques = {v} bloques",
+  noteE1: "Un exponente de 1 significa un solo factor: {b}¹ es solo {b}.",
+  noteSame: "{pow} significa usar {b} como factor {e} veces. Aquí da lo mismo que {b} × {e} = {prod}, pero es casualidad. No es la regla.",
+  noteNot: "{pow} NO es {b} × {e} = {prod}. Es {b} multiplicado {e} veces = {val}.",
+  alsoSay: "También puedes decir: {alt}",
+
+  anatomyTitle: "Partes de una potencia", anatomyPrompt: "Toca la base, el exponente o una palabra de abajo.",
+  term_b: "base", term_e: "exponente", term_p: "potencia", term_f: "factor",
+  defBase: "El número grande. Es el número que se multiplica.",
+  defExp: "El número pequeño de arriba. Dice cuántas veces se usa la base como factor.",
+  defPower: "Toda la expresión, como 5³. También puede ser el resultado: 125 es una potencia de 5.",
+  defFactor: "Un número que se multiplica. En 5 × 5 × 5, cada 5 es un factor.",
+  sayTitle: "Cómo se dice", thWrite: "Se escribe", thSay: "Se dice", thMeans: "Significa", wordsQuizTitle: "Preguntas rápidas",
+  qTapBase: "Toca la base.", qTapExp: "Toca el exponente.", hTapBase: "La base es el número grande.", hTapExp: "El exponente es el número pequeño de arriba.",
+  fbTapBase: "Ese es el exponente. Prueba con el otro.", fbTapExp: "Esa es la base. Prueba con el otro.",
+  exTapBase: "La base es {b}. Es el número que se multiplica en {pow}.", exTapExp: "El exponente es {e}. Dice cuántas veces se usa la base en {pow}.",
+  qHowMany: "En {pow}, ¿cuántas veces se usa {b} como factor?", hHowMany: "Mira el número pequeño de arriba.",
+  fbChoseBase: "{b} es la base, no la cantidad. Mira el exponente.", fbChoseValue: "Ese es el resultado de la multiplicación. La pregunta es cuántos factores hay.",
+  exHowMany: "{pow} = {chain}. Son {e} factores de {b}.",
+  qRead: "¿Qué palabras corresponden a {pow}?", readTimes: "{b} por {e}", hRead: "Di primero la base y después el exponente.",
+  fbSwapped: "Esos números están al revés. Primero va la base.", exRead: "{pow} se lee «{say}».",
+  qWrite: "¿Cuál es «{say}»?", hWrite: "La base es el número grande. El exponente es el número pequeño de arriba.", exWrite: "«{say}» se escribe {pow}.",
+  fbNotTimes: "{pow} no es {b} × {e} = {prod}. El exponente cuenta cuántas veces se usa {b} como factor.",
+
+  qOf: "Pregunta {n} de {total}", hint: "Pista", check: "Revisar", next: "Siguiente", finishRound: "Ver mis estrellas", tryAgain: "Todavía no. Inténtalo otra vez.",
+  right: "¡Sí!", showAnswer: "Así funciona:", roundDone: "Ronda completa", sumLine: "Ganaste {s} de {m} estrellas.", again: "Jugar otra vez",
+  typeNumber: "Escribe un número entero.", typeBoth: "Escribe la base y el exponente.", answerLabel: "Tu respuesta",
+
+  growLead: "Las potencias crecen muy rápido. Elige una historia y mueve el control.", pickStory: "Elige una historia",
+  story_plant_title: "Planta mágica", story_plant_text: "Una planta mágica duplica sus hojas cada día. Empieza con 1 hoja el día 0.", story_plant_unit: "hojas", story_plant_step: "Día", story_plant_stepl: "día", story_plant_each: "cada día",
+  story_msg_title: "Chat de grupo", story_msg_text: "Le mandas un mensaje a 3 amigos. Cada amigo lo manda a 3 amigos nuevos, y así sigue. La ronda 0 eres solo tú: 1 persona.", story_msg_unit: "personas", story_msg_step: "Ronda", story_msg_stepl: "ronda", story_msg_each: "cada ronda",
+  story_ten_title: "Valor posicional", story_ten_text: "Empieza con 1. Cada paso hace el número 10 veces más grande.", story_ten_unit: "", story_ten_step: "Paso", story_ten_stepl: "paso", story_ten_each: "cada paso",
+  cmpTitle: "Sumar frente a multiplicar", cmpWait: "Mueve el control a 2 o más para comparar.",
+  cmpAdd: "Sumar {b} {each}: {b} × {n} = {v}", cmpMul: "Multiplicar por {b} {each}: {pow} = {v}",
+  predictTitle: "Primero predice", predictQ: "Predice: ¿qué número tendrás en «{step} {n}»? Escribe tu idea y luego oprime Revisar.",
+  growLow: "Muy bajo.", growHigh: "Muy alto.", growHint: "Empieza en 1 y multiplica por {b} cada vez.", growExplain: "{pow} = {chain} = {v}",
+
+  zeroTitle: "¿Y un exponente de 0?", zeroLead: "Busca el patrón. Cada fila divide la fila de arriba entre la base.",
+  zeroNext: "Dividir entre {b}", zeroAsk: "¿Qué sigue? (Divide entre {b})", zeroOne: "Un factor: es solo la base.",
+  zeroNotZero: "No es 0. Divide la última fila entre {b} otra vez: {b} ÷ {b} = ?", zeroTry: "Sigue el patrón. La última fila fue {b}. ¿Cuánto es {b} ÷ {b}?",
+  zeroRule: "Cualquier número (menos 0) elevado a la 0 es igual a 1. Si divides {b} entre {b}, queda 1.",
+  tenTitle: "Potencias de 10", tenZeros: "El exponente {n} te dice cuántos ceros van después del 1: {n} ceros.",
+  oneTitle: "Potencias de 1", oneText: "1 multiplicado por sí mismo siempre es 1, así que 1 elevado a cualquier potencia es 1. Ejemplo: {ex}",
+  chalTitle: "Reto: bases negativas", chalLead: "Los paréntesis deciden qué se multiplica. Compara estos dos.",
+  negWhy1: "Los paréntesis hacen que todo el número negativo sea la base.", negWhy2: "Sin paréntesis: solo se multiplica la base. El signo negativo espera hasta el final.",
+  negRule: "Una base negativa da un resultado positivo si el exponente es par, y negativo si es impar.",
+
+  orderLead: "Toca la parte que debes hacer primero. Luego calcúlala. ¿Mismo nivel? De izquierda a derecha.",
+  rank1: "Paréntesis ( )", rank2: "Exponentes", rank3: "Multiplicación ×", rank4: "Suma + y resta −", level: "Nivel",
+  oClick: "Toca la parte que se hace primero.",
+  oWhy_pow: "Los exponentes van antes de multiplicar, sumar y restar.", oWhy_mul: "La multiplicación va antes de sumar y restar.", oWhy_add: "Solo quedan sumas y restas. Ve de izquierda a derecha.",
+  "oFb_skipped-parentheses": "Primero mira dentro de los paréntesis. Trabaja ahí antes que nada.",
+  "oFb_skipped-exponent": "Los exponentes van antes que ×, + y −. Busca el exponente.",
+  "oFb_skipped-multiplication": "Multiplica antes de sumar o restar.",
+  "oFb_wrong-order-left-to-right": "¿Mismo nivel? Ve de izquierda a derecha. Busca el primero de la izquierda.",
+  oHint_pow: "Haz el exponente ahora. Mira la parte que brilla.", oHint_mul: "Multiplica ahora. Mira la parte que brilla.", oHint_add: "Suma o resta ahora, de izquierda a derecha. Mira la parte que brilla.",
+  oValPow: "Multiplica la base por sí misma: {chain}", oValOp: "Revisa tu cuenta y vuelve a intentarlo.", oDone: "¡Terminaste! Mira tu respuesta.", oAnswer: "Respuesta:",
+  oNext: "Siguiente problema", oShow: "Muéstrame", oNew: "Problema nuevo",
+
+  practiceLead: "Elige un nivel. Cada nivel tiene 6 preguntas.",
+  lvl1: "Potencias y factores", lvl1d: "Escribe potencias. Desarróllalas.", lvl2: "Halla el valor", lvl2d: "Calcula potencias. Compáralas.", lvl3: "Expresiones", lvl3d: "Usa el orden de operaciones.",
+  chooseLevel: "Elegir nivel", nextLevel: "Siguiente nivel",
+  qPair: "Escribe {chain} como una potencia.", hPair: "Cuenta cuántas veces aparece {b}. Ese número es el exponente.",
+  fbCountFactors: "Cuenta cuántas veces aparece {b}. Esa cantidad es el exponente.", fbWrongBase: "Revisa la base. Es el número que se multiplica.", fbWroteValue: "Ese es el valor. Aquí escribe la base y el exponente.",
+  exPair: "{chain} = {pow}. La base es {b} y el exponente es {e}.",
+  qExpand: "¿Cuál muestra {pow} como multiplicación repetida?", hExpand: "Usa la base como factor tantas veces como diga el exponente.",
+  fbNotAdd: "Los exponentes significan multiplicar, no sumar.", exExpand: "{pow} = {chain}.",
+  qValue: "¿Cuánto es {pow}?", hValue: "Escríbelo como multiplicación repetida: {chain}",
+  fbTryLadder: "Todavía no. Multiplica un factor a la vez. La escalera de la pestaña «Constrúyelo» te puede ayudar.",
+  fbOneShort: "Te falta un factor. El exponente {e} significa {e} factores.", fbOneExtra: "Pusiste un factor de más. El exponente {e} significa {e} factores.",
+  fbAdded: "Sumaste la base y el exponente. Mejor multiplica la base por sí misma.", exValue: "{chain} = {val}",
+  qCompare: "¿Cuál es mayor?", equalWord: "Son iguales", hCompare: "Calcula primero cada valor y luego compara.",
+  fbCompareBase: "La base más grande no siempre gana. Calcula los dos valores.", fbCompareExp: "El exponente más grande no siempre gana. Calcula los dos valores.",
+  fbCompareCalc: "Calcula los dos valores y compáralos.", exCompare: "{a} = {va} y {b} = {vb}.",
+  qEval: "Calcula: {expr}", hOrder: "Paréntesis, luego exponentes, luego multiplicar, luego sumar o restar.",
+  fbOrderGeneric: "Todavía no. Ve paso a paso: paréntesis, exponentes, multiplicar y luego sumar o restar.",
+  "fb_added-first": "Sumaste demasiado pronto. Los exponentes y la multiplicación van antes de sumar.",
+  "fb_base-times-exp": "Multiplicaste la base por el exponente. Un exponente significa multiplicar la base por sí misma varias veces.",
+  "fb_multiplied-first": "Multiplicaste antes del exponente. Los exponentes van primero.",
+  "fb_exp-each": "Pusiste el exponente en cada número dentro de los paréntesis. Primero trabaja dentro de los paréntesis y después usa el exponente.",
+  exExpr: "{steps}"
+}
+};
+
+/* =====================================================================
+   Exponent Lab - core: helpers, language, Classroom Logger, student bar
+   ===================================================================== */
+var $ = function (s, r) { return (r || document).querySelector(s); };
+var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+var rnd = function (a, b) { return a + Math.floor(Math.random() * (b - a + 1)); };
+var pick = function (arr) { return arr[rnd(0, arr.length - 1)]; };
+function shuffle(a) { a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = rnd(0, i); var x = a[i]; a[i] = a[j]; a[j] = x; } return a; }
+function on(root, sel, evt, fn) { $$(sel, root).forEach(function (el) { el.addEventListener(evt, function (e) { fn(el, e); }); }); }
+
+var NB = ' ';
+function fmt(n) {
+  var s = String(Math.abs(n));
+  if (s.length >= 5) s = s.replace(/\B(?=(\d{3})+(?!\d))/g, NB);
+  return (n < 0 ? '−' : '') + s;
+}
+function parseNum(s) {
+  s = String(s).replace(/[\s,.  ]/g, '').replace(/[−–]/g, '-');
+  return /^-?\d+$/.test(s) ? parseInt(s, 10) : NaN;
+}
+function stars(n) { return '★'.repeat(n) + '☆'.repeat(3 - n); }
+
+/* ---------- language ---------- */
+var S = { lang: 'en', tab: 'build', timers: [] };
+var LKEY = 'exponent-lab-lang-v1';
+try { var sl = localStorage.getItem(LKEY); if (sl === 'es' || sl === 'en') S.lang = sl; } catch (e) {}
+function t(k, v) {
+  var d = I18N[S.lang] || I18N.en;
+  var s = d[k] != null ? d[k] : (I18N.en[k] != null ? I18N.en[k] : k);
+  if (v) s = s.replace(/\{(\w+)\}/g, function (m, n) { return v[n] != null ? v[n] : m; });
+  return s;
+}
+function clearTimers() { S.timers.forEach(function (id) { clearTimeout(id); }); S.timers = []; }
+function later(fn, ms) { var id = setTimeout(fn, ms); S.timers.push(id); return id; }
+
+/* ---------- Classroom Logger (same webhook + pattern as the other apps) ---------- */
+var LOGGER = {
+  url: "https://script.google.com/macros/s/AKfycbwV7Hd_JRL54Xbxm2tiAFx3kWm_WFO5nxSotzCD0PiAuEYtx4Z3AlTQ3UwwJYrsOKS6/exec",
+  app: "exponent-lab",
+  enabled: true
+};
+var student = { name: '', period: '' };
+var SKEY = 'exponent-lab-student-v1';
+try {
+  var savedStudent = JSON.parse(localStorage.getItem(SKEY) || 'null');
+  if (savedStudent) { student.name = savedStudent.name || ''; student.period = savedStudent.period || ''; }
+} catch (e) {}
+function saveStudent() { try { localStorage.setItem(SKEY, JSON.stringify(student)); } catch (e) {} }
+var hasLoggedStart = false;
+function sendLog(payload) {
+  if (!LOGGER.enabled || !LOGGER.url) return;
+  try {
+    var p = fetch(LOGGER.url, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(payload) });
+    if (p && p.catch) p.catch(function () {});
+  } catch (e) { /* never block a student's work because logging failed */ }
+}
+/* logEvent(event, section, item, correct, text, stars)
+   section = where in the app (e.g. practice-L2-value); item = the exact problem (e.g. 3^4)
+   correct = true/false/null; text = error label or note; stars = 0-3 or null */
+function logEvent(ev, section, item, correct, text, starCount) {
+  try {
+    var base = { app: LOGGER.app, student: ((student.name || '').trim() || 'unknown'), period: ((student.period || '').trim()) };
+    if (!hasLoggedStart && ev !== 'start') { hasLoggedStart = true; sendLog(Object.assign({}, base, { event: 'start', section: '', item: '' })); }
+    if (ev === 'start') hasLoggedStart = true;
+    var x = { event: ev, section: section || '', item: item == null ? '' : String(item), text: text == null ? '' : String(text) };
+    if (correct != null) x.correct = correct ? 1 : 0;
+    if (starCount != null) x.stars = starCount;
+    x.station = x.section; x.stageIndex = x.item; /* aliases used by older apps in the suite */
+    sendLog(Object.assign({}, base, x));
+  } catch (e) {}
+}
+
+/* ---------- math display helpers ---------- */
+function powHTML(b, e, cls) {
+  return '<span class="pow ' + (cls || '') + '"><span class="b">' + b + '</span><sup class="e">' + e + '</sup></span>';
+}
+var ORD_EN = { 1: 'first', 2: 'second', 3: 'third', 4: 'fourth', 5: 'fifth', 6: 'sixth', 7: 'seventh', 8: 'eighth', 9: 'ninth', 10: 'tenth' };
+var ORD_ES = { 1: 'primera', 2: 'segunda', 3: 'tercera', 4: 'cuarta', 5: 'quinta', 6: 'sexta', 7: 'séptima', 8: 'octava', 9: 'novena', 10: 'décima' };
+/* returns {main, alt} - alt only for squared / cubed */
+function readPower(b, e) {
+  if (S.lang === 'es') {
+    var o = ORD_ES[e] || (e + '.ª');
+    if (e === 1) return { main: b + ' a la primera potencia', alt: '' };
+    if (e === 2) return { main: b + ' al cuadrado', alt: b + ' a la segunda potencia' };
+    if (e === 3) return { main: b + ' al cubo', alt: b + ' a la tercera potencia' };
+    return { main: b + ' elevado a la ' + o + ' potencia', alt: b + ' a la ' + o };
+  }
+  var oe = ORD_EN[e] || (e + 'th');
+  if (e === 1) return { main: b + ' to the first power', alt: '' };
+  if (e === 2) return { main: b + ' squared', alt: b + ' to the second power' };
+  if (e === 3) return { main: b + ' cubed', alt: b + ' to the third power' };
+  return { main: b + ' to the ' + oe + ' power', alt: '' };
+}
+function speak(text) {
+  try {
+    if (!window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+    var u = new SpeechSynthesisUtterance(text.replace(/−/g, 'minus'));
+    u.lang = S.lang === 'es' ? 'es-ES' : 'en-US'; u.rate = 0.9;
+    window.speechSynthesis.speak(u);
+  } catch (e) {}
+}
+function chainText(b, e) { var a = []; for (var i = 0; i < e; i++) a.push(b); return a.join(' × '); }
+function chainHTML(b, e) { var a = []; for (var i = 0; i < e; i++) a.push('<span class="cb">' + b + '</span>'); return a.join(' <span class="times">×</span> '); }
+
+/* ---------- student name and period ---------- */
+function updateWho() {
+  $('#whoNote').textContent = (student.name || '').trim() ? t('whoHas') : t('whoNone');
+}
+
+/* =====================================================================
+   Question runner (used by Words and Practice)
+   ===================================================================== */
+function runSet(host, questions, o) {
+  var st = { i: 0, stars: 0, res: [] };
+  function maxTries(q) { return (q.kind === 'mc' || q.kind === 'tap') ? 2 : 3; }
+  function bodyHTML(q) {
+    if (q.kind === 'mc') {
+      return '<div class="opts">' + q.options.map(function (op, j) {
+        return '<button type="button" class="opt" data-j="' + j + '">' + op.html + '</button>';
+      }).join('') + '</div>';
+    }
+    if (q.kind === 'tap') {
+      return '<div class="tapbox"><span class="pow tapp"><button type="button" class="b" data-v="b" aria-label="' + t('base') + ' ' + q.b + '">' + q.b +
+        '</button><sup class="e"><button type="button" class="e" data-v="e" aria-label="' + t('exponent') + ' ' + q.e + '">' + q.e + '</button></sup></span></div>';
+    }
+    if (q.kind === 'num') {
+      return '<div class="numrow"><input id="qin" class="numin" type="text" inputmode="numeric" autocomplete="off" aria-label="' + t('answerLabel') + '">' +
+        '<button type="button" class="btn primary" data-q="check">' + t('check') + '</button></div>';
+    }
+    return '<div class="pairrow"><label class="lblb">' + t('base') + '<input id="qb1" class="numin small" type="text" inputmode="numeric" autocomplete="off"></label>' +
+      '<label class="lble">' + t('exponent') + '<input id="qb2" class="numin small" type="text" inputmode="numeric" autocomplete="off"></label>' +
+      '<button type="button" class="btn primary" data-q="check">' + t('check') + '</button></div>';
+  }
+  function show() {
+    var q = questions[st.i];
+    q.tries = 0; q.hinted = false; q.done = false;
+    var dots = questions.map(function (_, j) { return '<i class="' + (j < st.i ? 'done' : (j === st.i ? 'cur' : '')) + '"></i>'; }).join('');
+    host.innerHTML =
+      '<div class="qhead"><span class="qcount">' + t('qOf', { n: st.i + 1, total: questions.length }) + '</span><span class="dots" aria-hidden="true">' + dots + '</span></div>' +
+      '<div class="qprompt">' + q.prompt + '</div>' +
+      '<div class="qbody">' + bodyHTML(q) + '</div>' +
+      '<div class="fb" role="status" aria-live="polite"></div>' +
+      '<div class="qactions">' + (q.hint ? '<button type="button" class="btn" data-q="hint">💡 ' + t('hint') + '</button>' : '') +
+      '<button type="button" class="btn primary" data-q="next" hidden></button></div>';
+    bind(q);
+  }
+  function fb(kind, html) {
+    var el = $('.fb', host); el.className = 'fb ' + kind; el.innerHTML = html;
+  }
+  function bind(q) {
+    var firstInput = $('#qin', host) || $('#qb1', host);
+    if (firstInput) { try { firstInput.focus(); } catch (e) {} }
+    if (q.kind === 'mc') on(host, '.opt', 'click', function (el) { submit(q, q.options[+el.getAttribute('data-j')].v, el); });
+    if (q.kind === 'tap') on(host, '[data-v]', 'click', function (el) { submit(q, el.getAttribute('data-v'), el); });
+    if (q.kind === 'num') {
+      var run = function () { submit(q, parseNum($('#qin', host).value)); };
+      on(host, '[data-q="check"]', 'click', run);
+      $('#qin', host).addEventListener('keydown', function (e) { if (e.key === 'Enter') run(); });
+    }
+    if (q.kind === 'pair') {
+      var run2 = function () { submit(q, [parseNum($('#qb1', host).value), parseNum($('#qb2', host).value)]); };
+      on(host, '[data-q="check"]', 'click', run2);
+      $$('input', host).forEach(function (inp) { inp.addEventListener('keydown', function (e) { if (e.key === 'Enter') run2(); }); });
+    }
+    on(host, '[data-q="hint"]', 'click', function () {
+      if (q.done) return;
+      q.hinted = true;
+      logEvent('hint', q.section, q.item, null, 'hint');
+      fb('hint', q.hint);
+    });
+    on(host, '[data-q="next"]', 'click', function () {
+      if (st.i + 1 < questions.length) { st.i++; show(); } else { summary(); }
+    });
+  }
+  function submit(q, ans, el) {
+    if (q.done) return;
+    if (q.kind === 'num' && ans !== ans) { fb('bad', t('typeNumber')); return; }
+    if (q.kind === 'pair' && (ans[0] !== ans[0] || ans[1] !== ans[1])) { fb('bad', t('typeBoth')); return; }
+    q.tries++;
+    var r = q.judge(ans);
+    logEvent('answer', q.section, q.item, r.ok, (r.diag || '') + (r.shown != null ? ' | ' + r.shown : ''));
+    if (r.ok) { complete(q, true); return; }
+    if (el && q.kind === 'mc') { el.disabled = true; el.classList.add('wrong'); }
+    if (q.tries >= maxTries(q)) { complete(q, false); return; }
+    fb('bad', r.msg || t('tryAgain'));
+    var f = $('#qin', host) || $('#qb1', host); if (f) { try { f.focus(); f.select(); } catch (e) {} }
+  }
+  function complete(q, ok) {
+    q.done = true;
+    var s = ok ? Math.max(1, 3 - (q.tries - 1) - (q.hinted ? 1 : 0)) : 0;
+    st.stars += s; st.res.push(s);
+    logEvent('problem-complete', q.section, q.item, ok, 'tries:' + q.tries + (q.hinted ? ' hint' : '') + (ok ? '' : ' revealed'), s);
+    $$('input,.opt,[data-v],[data-q="check"],[data-q="hint"]', host).forEach(function (x) { x.disabled = true; });
+    if (q.kind === 'mc') $$('.opt', host).forEach(function (x, j) { if (q.options[j].v === q.correct) x.classList.add('right'); });
+    if (q.kind === 'tap') $$('[data-v]', host).forEach(function (x) { if (x.getAttribute('data-v') === q.correct) x.classList.add('right'); });
+    fb(ok ? 'good' : 'reveal', '<strong>' + (ok ? t('right') + ' ' + stars(s) : t('showAnswer')) + '</strong> ' + q.explain);
+    var nx = $('[data-q="next"]', host);
+    nx.hidden = false; nx.textContent = (st.i + 1 < questions.length) ? t('next') : t('finishRound');
+    try { nx.focus(); } catch (e) {}
+  }
+  function summary() {
+    var max = 3 * questions.length;
+    logEvent('set-complete', o.section, '', null, 'stars:' + st.stars + '/' + max, st.stars);
+    var acts = (o.actions ? o.actions(st) : []).map(function (a, j) {
+      return '<button type="button" class="btn ' + (a.cls || '') + '" data-s="' + j + '">' + a.label + '</button>';
+    }).join('');
+    host.innerHTML = '<div class="sum"><h3>' + t('roundDone') + '</h3><div class="bigstars" aria-hidden="true">' +
+      st.res.map(function (r) { return '<span class="rs">' + stars(r) + '</span>'; }).join('') + '</div>' +
+      '<p>' + t('sumLine', { s: st.stars, m: max }) + '</p><div class="qactions">' + acts + '</div></div>';
+    var list = o.actions ? o.actions(st) : [];
+    on(host, '[data-s]', 'click', function (el) { list[+el.getAttribute('data-s')].fn(); });
+  }
+  show();
+}
+
+/* =====================================================================
+   Expression engine: tokens, order of operations, step-by-step solver
+   t: n number, o operator, p power {b: n|g, e}, g group (parentheses)
+   ===================================================================== */
+var TID = 0;
+function N(v) { return { t: 'n', v: v, id: ++TID }; }
+function O(v) { return { t: 'o', v: v, id: ++TID }; }
+function P(b, e) { return { t: 'p', b: (typeof b === 'number' ? N(b) : b), e: e, id: ++TID }; }
+function G(inner) { return { t: 'g', in: inner, id: ++TID }; }
+function cloneList(list) {
+  return list.map(function (k) {
+    if (k.t === 'g') return { t: 'g', in: cloneList(k.in), id: k.id };
+    if (k.t === 'p') return { t: 'p', b: cloneList([k.b])[0], e: k.e, id: k.id };
+    return { t: k.t, v: k.v, id: k.id };
+  });
+}
+function normalize(list) {
+  for (var i = 0; i < list.length; i++) {
+    var k = list[i];
+    if (k.t === 'g') { normalize(k.in); if (k.in.length === 1 && k.in[0].t === 'n') list[i] = k.in[0]; }
+    else if (k.t === 'p' && k.b.t === 'g') { normalize(k.b.in); if (k.b.in.length === 1 && k.b.in[0].t === 'n') k.b = k.b.in[0]; }
+  }
+}
+function findAction(list) {
+  var i, k, r;
+  for (i = 0; i < list.length; i++) {
+    k = list[i];
+    if (k.t === 'g') { r = findAction(k.in); if (r) return r; }
+    if (k.t === 'p' && k.b.t === 'g') { r = findAction(k.b.in); if (r) return r; }
+  }
+  for (i = 0; i < list.length; i++) if (list[i].t === 'p' && list[i].b.t === 'n') return { kind: 'pow', list: list, idx: i };
+  for (i = 0; i < list.length; i++) if (list[i].t === 'o' && list[i].v === '×') return { kind: 'mul', list: list, idx: i };
+  for (i = 0; i < list.length; i++) if (list[i].t === 'o') return { kind: 'add', list: list, idx: i };
+  return null;
+}
+function actValue(a) {
+  if (a.kind === 'pow') { var p = a.list[a.idx]; return Math.pow(p.b.v, p.e); }
+  var l = a.list[a.idx - 1].v, r = a.list[a.idx + 1].v, op = a.list[a.idx].v;
+  return op === '×' ? l * r : (op === '+' ? l + r : l - r);
+}
+function actDesc(a) {
+  if (a.kind === 'pow') { var p = a.list[a.idx]; return powHTML(p.b.v, p.e); }
+  return a.list[a.idx - 1].v + ' ' + a.list[a.idx].v + ' ' + a.list[a.idx + 1].v;
+}
+function applyAct(a, val) {
+  if (a.kind === 'pow') a.list[a.idx] = N(val);
+  else a.list.splice(a.idx - 1, 3, N(val));
+}
+function locate(list, id) {
+  for (var i = 0; i < list.length; i++) {
+    var k = list[i];
+    if (k.id === id) return { list: list, idx: i };
+    var r = null;
+    if (k.t === 'g') r = locate(k.in, id);
+    else if (k.t === 'p' && k.b.t === 'g') r = locate(k.b.in, id);
+    if (r) return r;
+  }
+  return null;
+}
+function hasGroup(list) {
+  return list.some(function (k) { return k.t === 'g' || (k.t === 'p' && k.b.t === 'g'); });
+}
+function tokHTML(list, ctx) {
+  ctx = ctx || {};
+  return list.map(function (k) {
+    var hl = (ctx.pending === k.id ? ' pending' : '') + (ctx.hint === k.id ? ' hint' : '');
+    if (k.t === 'n') return '<span class="tn">' + k.v + '</span>';
+    if (k.t === 'o') return ctx.live ? '<span role="button" tabindex="0" class="tk op' + hl + '" data-id="' + k.id + '">' + k.v + '</span>' : '<span class="top' + hl + '">' + k.v + '</span>';
+    if (k.t === 'g') return '<span class="grp">(</span>' + tokHTML(k.in, ctx) + '<span class="grp">)</span>';
+    var bh = k.b.t === 'n' ? '<span class="b">' + k.b.v + '</span>' : '<span class="b">(' + tokHTML(k.b.in, ctx) + ')</span>';
+    return '<span class="pow' + (ctx.live ? ' tk pw' : '') + hl + '"' + (ctx.live ? ' role="button" tabindex="0" data-id="' + k.id + '"' : '') + '>' + bh + '<sup class="e">' + k.e + '</sup></span>';
+  }).join(' ');
+}
+function tokText(list) {
+  return list.map(function (k) {
+    if (k.t === 'n') return String(k.v);
+    if (k.t === 'o') return k.v === '×' ? '*' : k.v;
+    if (k.t === 'g') return '(' + tokText(k.in) + ')';
+    return (k.b.t === 'n' ? k.b.v : '(' + tokText(k.b.in) + ')') + '^' + k.e;
+  }).join('');
+}
+/* solve a whole expression; returns {value, steps:[html...]} */
+function autoSolve(tokens) {
+  var work = cloneList(tokens); normalize(work);
+  var steps = [tokHTML(work)], guard = 0, a;
+  while ((a = findAction(work)) && guard++ < 40) { applyAct(a, actValue(a)); normalize(work); steps.push(tokHTML(work)); }
+  return { value: work.length === 1 ? work[0].v : NaN, steps: steps };
+}
+/* random expressions by level, with the common wrong answers and a label for each */
+function makeExpr(level) {
+  for (var tries = 0; tries < 60; tries++) {
+    var d = null, a, b, c, e;
+    if (level === 1) {
+      var w = rnd(0, 2);
+      if (w === 0) { a = rnd(2, 9); b = rnd(2, 4); e = rnd(2, 3); d = { tk: [N(a), O('+'), P(b, e)], wr: [[Math.pow(a + b, e), 'added-first'], [a + b * e, 'base-times-exp']] }; }
+      else if (w === 1) { a = rnd(2, 5); b = rnd(2, 3); e = rnd(2, 3); d = { tk: [N(a), O('×'), P(b, e)], wr: [[Math.pow(a * b, e), 'multiplied-first'], [a * b * e, 'base-times-exp']] }; }
+      else { b = rnd(2, 5); e = 2; c = rnd(1, 9); d = { tk: [P(b, e), O('−'), N(c)], wr: [[b * e - c, 'base-times-exp']] }; }
+    } else if (level === 2) {
+      var w2 = rnd(0, 2);
+      if (w2 === 0) { a = rnd(2, 5); b = rnd(2, 3); d = { tk: [P(a, 2), O('+'), P(b, 3)], wr: [[a * 2 + b * 3, 'base-times-exp']] }; }
+      else if (w2 === 1) { a = rnd(2, 9); b = rnd(2, 5); c = rnd(2, 4); d = { tk: [N(a), O('+'), N(b), O('×'), P(c, 2)], wr: [[(a + b) * c * c, 'added-first'], [Math.pow(a + b * c, 2), 'multiplied-first'], [a + b * c * 2, 'base-times-exp']] }; }
+      else { a = rnd(2, 4); b = rnd(2, 4); c = rnd(1, 9); d = { tk: [N(a), O('×'), P(b, 2), O('−'), N(c)], wr: [[Math.pow(a * b, 2) - c, 'multiplied-first'], [a * b * 2 - c, 'base-times-exp']] }; }
+    } else {
+      var w3 = rnd(0, 2);
+      if (w3 === 0) { a = rnd(1, 5); b = rnd(1, 5); d = { tk: [P(G([N(a), O('+'), N(b)]), 2)], wr: [[a * a + b * b, 'exp-each'], [(a + b) * 2, 'base-times-exp']] }; }
+      else if (w3 === 1) { a = rnd(2, 3); b = rnd(1, 2); c = rnd(1, 3); d = { tk: [N(a), O('×'), P(G([N(b), O('+'), N(c)]), 2)], wr: [[Math.pow(a * (b + c), 2), 'multiplied-first'], [a * (b * b + c * c), 'exp-each'], [a * (b + c) * 2, 'base-times-exp']] }; }
+      else { a = rnd(3, 7); b = rnd(1, a - 1); c = rnd(1, 9); d = { tk: [P(G([N(a), O('−'), N(b)]), 2), O('+'), N(c)], wr: [[a * a - b * b + c, 'exp-each'], [(a - b) * 2 + c, 'base-times-exp']] }; }
+    }
+    var solved = autoSolve(d.tk);
+    if (solved.value === solved.value && solved.value >= 0 && solved.value <= 400 && solved.steps.length > 1) {
+      var ok = true;
+      /* every intermediate number must stay non-negative */
+      var chk = cloneList(d.tk); normalize(chk); var ac, g = 0;
+      while ((ac = findAction(chk)) && g++ < 40) { var v = actValue(ac); if (v < 0) ok = false; applyAct(ac, v); normalize(chk); }
+      if (ok) return { tokens: d.tk, value: solved.value, steps: solved.steps, wrongs: d.wr.filter(function (w) { return w[0] !== solved.value; }) };
+    }
+  }
+  return null;
+}
+
+/* =====================================================================
+   Question builders (Words + Practice)
+   ===================================================================== */
+function mcOptions(list) { return shuffle(list); }
+var MIX = '×';
+function qBase(type, section, item) { return { type: type, section: section, item: item }; }
+
+/* ---- Words ---- */
+function qTap(which) {
+  var b = rnd(2, 9), e = rnd(2, 6), q = qBase('tap-' + which, 'words-tap-' + which, b + '^' + e);
+  q.kind = 'tap'; q.b = b; q.e = e; q.correct = which === 'base' ? 'b' : 'e';
+  q.prompt = which === 'base' ? t('qTapBase') : t('qTapExp');
+  q.hint = which === 'base' ? t('hTapBase') : t('hTapExp');
+  q.judge = function (a) {
+    var ok = a === q.correct;
+    return { ok: ok, diag: ok ? 'correct' : 'tapped-' + (a === 'b' ? 'base' : 'exponent'), msg: which === 'base' ? t('fbTapBase') : t('fbTapExp'), shown: a };
+  };
+  q.explain = which === 'base' ? t('exTapBase', { b: b, pow: powHTML(b, e) }) : t('exTapExp', { e: e, pow: powHTML(b, e) });
+  return q;
+}
+function qHowMany() {
+  var b = rnd(2, 9), e = rnd(2, 6);
+  if (b === e) e = e === 6 ? 5 : e + 1;
+  var q = qBase('how-many', 'words-how-many', b + '^' + e);
+  q.kind = 'mc'; q.correct = e;
+  q.prompt = t('qHowMany', { pow: powHTML(b, e), b: b });
+  var opts = [{ v: e, html: String(e), diag: 'correct' }, { v: b, html: String(b), diag: 'chose-base', msg: t('fbChoseBase', { b: b }) }];
+  var prod = b * e; if (prod !== e && prod !== b) opts.push({ v: prod, html: String(prod), diag: 'multiplied', msg: t('fbNotTimes', { pow: powHTML(b, e), b: b, e: e, prod: prod }) });
+  var val = Math.pow(b, e); if (val !== e && val !== b && val !== prod) opts.push({ v: val, html: fmt(val), diag: 'chose-value', msg: t('fbChoseValue') });
+  q.options = mcOptions(opts);
+  q.hint = t('hHowMany');
+  q.judge = function (a) { var op = q.options.filter(function (x) { return x.v === a; })[0]; var ok = a === e; return { ok: ok, diag: ok ? 'correct' : op.diag, msg: op && op.msg, shown: a }; };
+  q.explain = t('exHowMany', { pow: powHTML(b, e), e: e, b: b, chain: chainHTML(b, e) });
+  return q;
+}
+function qRead() {
+  var b = rnd(2, 9), e = rnd(2, 6);
+  if (b === e) e = e === 6 ? 5 : e + 1;
+  var q = qBase('read', 'words-read', b + '^' + e);
+  q.kind = 'mc'; q.correct = 'ok';
+  q.prompt = t('qRead', { pow: powHTML(b, e) });
+  var good = readPower(b, e).main, sw = readPower(e, b).main;
+  var opts = [{ v: 'ok', html: good, diag: 'correct' }, { v: 'sw', html: sw, diag: 'swapped', msg: t('fbSwapped') },
+    { v: 'tm', html: t('readTimes', { b: b, e: e }), diag: 'times', msg: t('fbNotTimes', { pow: powHTML(b, e), b: b, e: e, prod: b * e }) }];
+  q.options = mcOptions(opts);
+  q.hint = t('hRead');
+  q.judge = function (a) { var op = q.options.filter(function (x) { return x.v === a; })[0]; return { ok: a === 'ok', diag: op.diag, msg: op.msg, shown: op.html }; };
+  q.explain = t('exRead', { pow: powHTML(b, e), say: good });
+  return q;
+}
+function qWrite() {
+  var b = rnd(2, 9), e = rnd(2, 6);
+  if (b === e) e = e === 6 ? 5 : e + 1;
+  var q = qBase('write', 'words-write', b + '^' + e);
+  q.kind = 'mc'; q.correct = 'ok';
+  q.prompt = t('qWrite', { say: '<strong>' + readPower(b, e).main + '</strong>' });
+  var opts = [{ v: 'ok', html: powHTML(b, e), diag: 'correct' }, { v: 'sw', html: powHTML(e, b), diag: 'swapped', msg: t('fbSwapped') },
+    { v: 'tm', html: b + ' ' + MIX + ' ' + e, diag: 'times', msg: t('fbNotTimes', { pow: powHTML(b, e), b: b, e: e, prod: b * e }) }];
+  q.options = mcOptions(opts);
+  q.hint = t('hWrite');
+  q.judge = function (a) { var op = q.options.filter(function (x) { return x.v === a; })[0]; return { ok: a === 'ok', diag: op.diag, msg: op.msg, shown: a }; };
+  q.explain = t('exWrite', { pow: powHTML(b, e), say: readPower(b, e).main });
+  return q;
+}
+function wordsRound() { return [qTap('base'), qTap('exp'), qHowMany(), qRead(), qWrite(), qRead()]; }
+
+/* ---- Practice level 1: factors <-> power ---- */
+function qPair() {
+  var b = rnd(2, 9), e = rnd(2, 5), q = qBase('pair', 'practice-L1-pair', b + '^' + e);
+  q.kind = 'pair';
+  q.prompt = t('qPair', { chain: '<span class="chainbig">' + chainHTML(b, e) + '</span>' });
+  q.hint = t('hPair', { b: b });
+  q.judge = function (a) {
+    var bb = a[0], ee = a[1];
+    if (bb === b && ee === e) return { ok: true, diag: 'correct', shown: bb + '^' + ee };
+    var d = 'other', m = t('tryAgain');
+    if (bb === e && ee === b) { d = 'swapped'; m = t('fbSwapped'); }
+    else if (bb === b) { d = 'wrong-exponent'; m = t('fbCountFactors', { b: b }); }
+    else if (ee === e) { d = 'wrong-base'; m = t('fbWrongBase'); }
+    else if (bb === Math.pow(b, e)) { d = 'wrote-value'; m = t('fbWroteValue'); }
+    return { ok: false, diag: d, msg: m, shown: bb + '^' + ee };
+  };
+  q.explain = t('exPair', { chain: chainHTML(b, e), pow: powHTML(b, e), b: b, e: e });
+  return q;
+}
+function qExpand() {
+  var b = rnd(2, 5), e = rnd(2, 4);
+  if (b === e) e = e === 4 ? 3 : e + 1;
+  var q = qBase('expand', 'practice-L1-expand', b + '^' + e);
+  q.kind = 'mc'; q.correct = 'ok';
+  q.prompt = t('qExpand', { pow: powHTML(b, e) });
+  var plus = []; for (var i = 0; i < e; i++) plus.push(b);
+  var opts = [
+    { v: 'ok', html: chainText(b, e), diag: 'correct' },
+    { v: 'tm', html: b + ' ' + MIX + ' ' + e, diag: 'base-times-exp', msg: t('fbNotTimes', { pow: powHTML(b, e), b: b, e: e, prod: b * e }) },
+    { v: 'sw', html: chainText(e, b), diag: 'swapped', msg: t('fbSwapped') },
+    { v: 'ad', html: plus.join(' + '), diag: 'repeated-add', msg: t('fbNotAdd') }];
+  q.options = mcOptions(opts);
+  q.hint = t('hExpand');
+  q.judge = function (a) { var op = q.options.filter(function (x) { return x.v === a; })[0]; return { ok: a === 'ok', diag: op.diag, msg: op.msg, shown: op.html }; };
+  q.explain = t('exExpand', { pow: powHTML(b, e), chain: chainHTML(b, e) });
+  return q;
+}
+function practiceL1() { return [qPair(), qExpand(), qPair(), qExpand(), qPair(), qExpand()]; }
+
+/* ---- Practice level 2: values ---- */
+var VALUE_PAIRS = [[2, 3], [2, 4], [2, 5], [2, 6], [2, 8], [3, 2], [3, 3], [3, 4], [3, 5], [4, 2], [4, 3], [5, 2], [5, 3], [6, 2], [6, 3], [7, 2], [9, 2], [10, 3], [10, 4], [1, 7], [8, 2]];
+var CMP_PAIRS = [[2, 3, 3, 2], [2, 4, 4, 2], [2, 5, 5, 2], [3, 4, 4, 3], [2, 6, 6, 2], [3, 3, 5, 2], [2, 7, 7, 2]];
+function qValue(pair) {
+  var b = pair[0], e = pair[1], val = Math.pow(b, e), q = qBase('value', 'practice-L2-value', b + '^' + e);
+  q.kind = 'num';
+  q.prompt = t('qValue', { pow: '<span class="chainbig">' + powHTML(b, e) + '</span>' });
+  q.hint = t('hValue', { chain: chainHTML(b, e) });
+  q.judge = function (n) {
+    if (n === val) return { ok: true, diag: 'correct', shown: n };
+    var d = 'other', m = t('fbTryLadder');
+    if (n === b * e) { d = 'base-times-exp'; m = t('fbNotTimes', { pow: powHTML(b, e), b: b, e: e, prod: b * e }); }
+    else if (n === Math.pow(e, b)) { d = 'swapped'; m = t('fbSwapped'); }
+    else if (n === Math.pow(b, e - 1)) { d = 'one-factor-short'; m = t('fbOneShort', { e: e }); }
+    else if (n === Math.pow(b, e + 1)) { d = 'one-factor-extra'; m = t('fbOneExtra', { e: e }); }
+    else if (n === b + e) { d = 'added'; m = t('fbAdded'); }
+    return { ok: false, diag: d, msg: m, shown: n };
+  };
+  q.explain = t('exValue', { chain: chainHTML(b, e), val: fmt(val) });
+  return q;
+}
+function qCompare() {
+  var c = pick(CMP_PAIRS); if (Math.random() < 0.5) c = [c[2], c[3], c[0], c[1]];
+  var v1 = Math.pow(c[0], c[1]), v2 = Math.pow(c[2], c[3]);
+  var correct = v1 > v2 ? 'a' : (v1 < v2 ? 'b' : 'eq');
+  var q = qBase('compare', 'practice-L2-compare', c[0] + '^' + c[1] + ' vs ' + c[2] + '^' + c[3]);
+  q.kind = 'mc'; q.correct = correct;
+  q.prompt = t('qCompare');
+  var biggerBase = c[0] > c[2] ? 'a' : (c[0] < c[2] ? 'b' : 'eq'), biggerExp = c[1] > c[3] ? 'a' : (c[1] < c[3] ? 'b' : 'eq');
+  var opts = [{ v: 'a', html: powHTML(c[0], c[1]) }, { v: 'b', html: powHTML(c[2], c[3]) }, { v: 'eq', html: t('equalWord') }];
+  opts.forEach(function (op) {
+    if (op.v === correct) op.diag = 'correct';
+    else if (op.v === biggerBase) { op.diag = 'compared-bases'; op.msg = t('fbCompareBase'); }
+    else if (op.v === biggerExp) { op.diag = 'compared-exponents'; op.msg = t('fbCompareExp'); }
+    else { op.diag = 'other'; op.msg = t('fbCompareCalc'); }
+  });
+  q.options = opts;
+  q.hint = t('hCompare');
+  q.judge = function (a) { var op = q.options.filter(function (x) { return x.v === a; })[0]; return { ok: a === correct, diag: op.diag, msg: op.msg, shown: a }; };
+  q.explain = t('exCompare', { a: powHTML(c[0], c[1]), va: fmt(v1), b: powHTML(c[2], c[3]), vb: fmt(v2) });
+  return q;
+}
+function practiceL2() {
+  var pairs = shuffle(VALUE_PAIRS).slice(0, 4);
+  return [qValue(pairs[0]), qValue(pairs[1]), qCompare(), qValue(pairs[2]), qValue(pairs[3]), qCompare()];
+}
+
+/* ---- Practice level 3: expressions ---- */
+function qExpr(level) {
+  var x = makeExpr(level), q = qBase('expr', 'practice-L3-expr', null);
+  q.item = tokText(x.tokens);
+  q.kind = 'num';
+  q.prompt = t('qEval', { expr: '<span class="exprbig">' + tokHTML(x.tokens) + '</span>' });
+  q.hint = t('hOrder');
+  q.judge = function (n) {
+    if (n === x.value) return { ok: true, diag: 'correct', shown: n };
+    var hit = x.wrongs.filter(function (w) { return w[0] === n; })[0];
+    if (hit) return { ok: false, diag: hit[1], msg: t('fb_' + hit[1]), shown: n };
+    return { ok: false, diag: 'other', msg: t('fbOrderGeneric'), shown: n };
+  };
+  q.explain = t('exExpr', { steps: x.steps.join(' <span class="arrow">→</span> ') });
+  return q;
+}
+function practiceL3() { return [qExpr(1), qExpr(1), qExpr(2), qExpr(2), qExpr(3), qExpr(3)]; }
+
+/* =====================================================================
+   TAB 1 - Build it
+   ===================================================================== */
+var B = { b: 3, e: 4, logT: null };
+
+function stepperHTML(k, label, cls, val) {
+  return '<div class="stepper ' + cls + '"><span class="slabel">' + label + '</span><div class="sctl">' +
+    '<button type="button" class="sbtn" data-k="' + k + '" data-d="-1" aria-label="' + label + ' −">−</button>' +
+    '<output id="v-' + k + '" aria-live="polite">' + val + '</output>' +
+    '<button type="button" class="sbtn" data-k="' + k + '" data-d="1" aria-label="' + label + ' +">+</button></div></div>';
+}
+function blocksHTML(b, e) {
+  if (e > 3) return '<p class="muted">' + t('noBlocks') + '</p>';
+  var cs;
+  if (e === 1) cs = 30;
+  else if (e === 2) cs = Math.max(10, Math.min(30, Math.floor(300 / b)));
+  else cs = b <= 3 ? 18 : (b <= 5 ? 14 : (b <= 7 ? 11 : (b <= 8 ? 9 : 8)));
+  function layer(rows, shade) {
+    var cells = '', n = rows * b;
+    for (var i = 0; i < n; i++) cells += '<i></i>';
+    return '<div class="lay s' + shade + '" style="grid-template-columns:repeat(' + b + ',' + cs + 'px);grid-auto-rows:' + cs + 'px">' + cells + '</div>';
+  }
+  var html = '', cap;
+  if (e === 1) { html = layer(1, 0); cap = t('capE1', { b: b }); }
+  else if (e === 2) { html = layer(b, 0); cap = t('capE2', { b: b, v: fmt(b * b) }); }
+  else { for (var l = 0; l < b; l++) html += layer(b, l % 3); cap = t('capE3', { b: b, v: fmt(b * b * b) }); }
+  return '<div class="blocks e' + e + '" role="img" aria-label="' + cap.replace(/"/g, '') + '">' + html + '</div><p class="cap">' + cap + '</p>';
+}
+function ladderHTML(b, e) {
+  var max = Math.pow(b, e), rows = '';
+  for (var k = 1; k <= e; k++) {
+    var v = Math.pow(b, k), w = Math.max(1.5, v / max * 100);
+    var mid = k === 1 ? t('oneFactor', { b: b }) : fmt(Math.pow(b, k - 1)) + ' ' + MIX + ' ' + b + ' = ' + fmt(v);
+    rows += '<li class="lrow"><span class="lp">' + powHTML(b, k) + '</span><span class="lm">' + mid + '</span>' +
+      '<span class="lbar"><i style="width:' + w + '%"></i></span><span class="lv">' + fmt(v) + '</span></li>';
+  }
+  return '<ol class="ladder">' + rows + '</ol>';
+}
+function buildOut() {
+  var b = B.b, e = B.e, val = Math.pow(b, e), rd = readPower(b, e);
+  var warn;
+  if (e === 1) warn = t('noteE1', { b: b });
+  else if (val === b * e) warn = t('noteSame', { pow: powHTML(b, e), b: b, e: e, prod: b * e });
+  else warn = t('noteNot', { pow: powHTML(b, e), b: b, e: e, prod: b * e, val: fmt(val) });
+  var chips = '';
+  for (var i = 0; i < e; i++) chips += (i ? '<span class="times">' + MIX + '</span>' : '') + '<span class="chip">' + b + '</span>';
+  return '' +
+    '<div class="bigpow"><div class="bp">' + powHTML(b, e) + '</div><div class="eq">= <span class="val">' + fmt(val) + '</span></div></div>' +
+    '<div class="tags"><span class="tag tb"><b>' + t('base') + '</b> ' + t('baseDef') + '</span><span class="tag te"><b>' + t('exponent') + '</b> ' + t('expDef') + '</span></div>' +
+    '<div class="say"><span class="saytxt">' + rd.main + '</span><button type="button" class="btn small" id="bSpeak">🔊 ' + t('listen') + '</button></div>' +
+    (rd.alt ? '<p class="muted alt">' + t('alsoSay', { alt: rd.alt }) + '</p>' : '') +
+    '<div class="card inner"><h3>' + t('factorsTitle', { e: e, b: b }) + '</h3><div class="chain">' + chips + '<span class="times">=</span><span class="val">' + fmt(val) + '</span></div>' +
+    '<p class="warn">' + warn + '</p></div>' +
+    '<div class="card inner"><div class="rowhead"><h3>' + t('ladderTitle', { b: b }) + '</h3><button type="button" class="btn small" id="bWatch">▶ ' + t('watch') + '</button></div>' + ladderHTML(b, e) + '</div>' +
+    '<div class="card inner"><h3>' + t('blocksTitle') + '</h3>' + blocksHTML(b, e) + '</div>';
+}
+function updateBuild() {
+  clearTimers();
+  $('#v-b').textContent = B.b; $('#v-e').textContent = B.e;
+  $('#bOut').innerHTML = buildOut();
+  var sp = $('#bSpeak'); if (sp) sp.addEventListener('click', function () { speak(readPower(B.b, B.e).main); logEvent('listen', 'build', B.b + '^' + B.e, null, ''); });
+  var w = $('#bWatch'); if (w) w.addEventListener('click', watchBuild);
+  clearTimeout(B.logT);
+  B.logT = setTimeout(function () { logEvent('explore', 'build', B.b + '^' + B.e, null, fmt(Math.pow(B.b, B.e))); }, 1500);
+}
+function watchBuild() {
+  clearTimers();
+  var rows = $$('#bOut .lrow');
+  logEvent('watch-build', 'build', B.b + '^' + B.e, null, '');
+  var reduce = false; try { reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
+  if (reduce) return;
+  rows.forEach(function (r) { r.classList.add('hid'); });
+  rows.forEach(function (r, i) { later(function () { r.classList.remove('hid'); r.classList.add('flash'); }, 450 + i * 750); });
+}
+function renderBuild(host) {
+  host.innerHTML =
+    '<div class="card stage"><p class="lead">' + t('buildLead') + '</p>' +
+    '<div class="ctrls">' + stepperHTML('b', t('base'), 'sb', B.b) + stepperHTML('e', t('exponent'), 'se', B.e) + '</div></div>' +
+    '<div id="bOut"></div>';
+  on(host, '.sbtn', 'click', function (el) {
+    var k = el.getAttribute('data-k'), d = +el.getAttribute('data-d');
+    if (k === 'b') B.b = Math.max(1, Math.min(10, B.b + d)); else B.e = Math.max(1, Math.min(6, B.e + d));
+    updateBuild();
+  });
+  updateBuild();
+}
+
+/* =====================================================================
+   TAB 2 - Say it (words + quick questions)
+   ===================================================================== */
+var DEFS = { b: 'defBase', e: 'defExp', p: 'defPower', f: 'defFactor' };
+function renderWords(host) {
+  var rows = '';
+  for (var e = 1; e <= 6; e++) {
+    var rd = readPower(5, e);
+    rows += '<tr><td>' + powHTML(5, e) + '</td><td>' + rd.main + (rd.alt ? '<span class="alt2">' + rd.alt + '</span>' : '') + '</td><td class="chaincell">' + chainHTML(5, e) + '</td>' +
+      '<td><button type="button" class="btn small say-btn" data-e="' + e + '" aria-label="' + t('listen') + ' ' + rd.main + '">🔊</button></td></tr>';
+  }
+  host.innerHTML =
+    '<div class="card"><h2>' + t('anatomyTitle') + '</h2>' +
+    '<div class="anat"><div class="anat-pow"><span class="pow big"><button type="button" class="b" data-def="b">5</button><sup class="e"><button type="button" class="e" data-def="e">3</button></sup></span></div>' +
+    '<div class="defbox" id="defBox" aria-live="polite"><p>' + t('anatomyPrompt') + '</p></div></div>' +
+    '<div class="defrow">' + ['b', 'e', 'p', 'f'].map(function (k) { return '<button type="button" class="chipbtn k' + k + '" data-def="' + k + '">' + t('term_' + k) + '</button>'; }).join('') + '</div></div>' +
+    '<div class="card"><h2>' + t('sayTitle') + '</h2><div class="tablewrap"><table class="saytable"><thead><tr><th>' + t('thWrite') + '</th><th>' + t('thSay') + '</th><th>' + t('thMeans') + '</th><th></th></tr></thead><tbody>' + rows + '</tbody></table></div></div>' +
+    '<div class="card"><h2>' + t('wordsQuizTitle') + '</h2><div id="wQuiz" class="quiz"></div></div>';
+  on(host, '[data-def]', 'click', function (el) {
+    var k = el.getAttribute('data-def');
+    $('#defBox').innerHTML = '<p><strong class="k' + k + '">' + t('term_' + k) + '</strong> — ' + t(DEFS[k]) + '</p>';
+    logEvent('term', 'words', k, null, '');
+  });
+  on(host, '.say-btn', 'click', function (el) { speak(readPower(5, +el.getAttribute('data-e')).main); });
+  startWords();
+}
+function startWords() {
+  runSet($('#wQuiz'), wordsRound(), {
+    section: 'words',
+    actions: function () { return [{ label: t('again'), cls: 'primary', fn: startWords }]; }
+  });
+}
+
+/* =====================================================================
+   TAB 3 - Watch it grow
+   ===================================================================== */
+var STORIES = [
+  { id: 'plant', b: 2, em: '🌱', max: 10, pred: [6, 7, 8] },
+  { id: 'msg', b: 3, em: '📱', max: 7, pred: [4, 5, 6] },
+  { id: 'ten', b: 10, em: '🔟', max: 6, pred: [3, 4, 5] }
+];
+var GR = { s: 0, n: 3, P: 0, tries: 0, done: false, logT: null };
+function newPredict() { GR.P = pick(STORIES[GR.s].pred); GR.tries = 0; GR.done = false; }
+
+function growRows() {
+  var s = STORIES[GR.s], b = s.b, n = GR.n, top = Math.pow(b, n), rows = '', unit = t('story_' + s.id + '_unit');
+  for (var i = 0; i <= s.max; i++) {
+    var v = Math.pow(b, i), future = i > n;
+    rows += '<li class="grow-row' + (i === n ? ' cur' : '') + (future ? ' future' : '') + '">' +
+      '<span class="gs">' + t('story_' + s.id + '_step') + ' ' + i + '</span><span class="gp">' + powHTML(b, i) + '</span>' +
+      '<span class="gbar">' + (future ? '' : '<i style="width:' + Math.max(0.6, v / top * 100) + '%"></i>') + '</span>' +
+      '<span class="gv">' + (future ? '?' : fmt(v) + (unit ? ' <small>' + unit + '</small>' : '')) + '</span></li>';
+  }
+  return '<ol class="growlist">' + rows + '</ol>';
+}
+function growCompare() {
+  var s = STORIES[GR.s], b = s.b, n = GR.n;
+  if (n < 2) return '<p class="muted">' + t('cmpWait') + '</p>';
+  var add = b * n, pw = Math.pow(b, n), each = t('story_' + s.id + '_each');
+  return '<div class="cmp2"><div class="cmprow"><span class="cl">' + t('cmpAdd', { b: b, each: each, n: n, v: fmt(add) }) + '</span><span class="gbar add"><i style="width:' + Math.max(1, add / pw * 100) + '%"></i></span></div>' +
+    '<div class="cmprow"><span class="cl">' + t('cmpMul', { b: b, each: each, pow: powHTML(b, n), v: fmt(pw) }) + '</span><span class="gbar mul"><i style="width:100%"></i></span></div></div>';
+}
+function updateGrow() {
+  var s = STORIES[GR.s], b = s.b, n = GR.n, unit = t('story_' + s.id + '_unit');
+  $('#gHead').innerHTML = t('story_' + s.id + '_step') + ' ' + n + ': ' + powHTML(b, n) + ' = <span class="val">' + fmt(Math.pow(b, n)) + '</span>' + (unit ? ' <small>' + unit + '</small>' : '');
+  $('#gList').innerHTML = growRows();
+  $('#gCmp').innerHTML = growCompare();
+  $('#gSlide').value = n;
+  $('#gSlideVal').textContent = n;
+  clearTimeout(GR.logT);
+  GR.logT = setTimeout(function () { logEvent('slide', 'grow-' + s.id, b + '^' + n, null, fmt(Math.pow(b, n))); }, 1500);
+}
+function growFb(kind, html) { var el = $('#gFb'); el.className = 'fb ' + kind; el.innerHTML = html; }
+function predictCheck() {
+  if (GR.done) return;
+  var s = STORIES[GR.s], b = s.b, P = GR.P, ans = Math.pow(b, P), v = parseNum($('#gGuess').value);
+  if (v !== v) { growFb('bad', t('typeNumber')); return; }
+  GR.tries++;
+  var ok = v === ans, d = 'too-low';
+  if (ok) d = 'correct';
+  else if (v === b * P) d = 'base-times-exp';
+  else if (v === Math.pow(b, P - 1)) d = 'one-short';
+  else if (v === Math.pow(b, P + 1)) d = 'one-extra';
+  else if (v > ans) d = 'too-high';
+  var reveal = !ok && GR.tries >= 3;
+  logEvent('predict', 'grow-' + s.id, b + '^' + P, ok, d + ' | ' + v, ok ? Math.max(1, 4 - GR.tries) : (reveal ? 0 : null));
+  if (ok || reveal) {
+    GR.done = true; GR.n = P; updateGrow();
+    $('#gGuess').disabled = true; $('#gCheck').disabled = true;
+    growFb(ok ? 'good' : 'reveal', '<strong>' + (ok ? t('right') : t('showAnswer')) + '</strong> ' + t('growExplain', { pow: powHTML(b, P), chain: chainHTML(b, P), v: fmt(ans) }));
+    return;
+  }
+  var m;
+  if (d === 'base-times-exp') m = t('fbNotTimes', { pow: powHTML(b, P), b: b, e: P, prod: b * P });
+  else if (d === 'one-short') m = t('fbOneShort', { e: P });
+  else if (d === 'one-extra') m = t('fbOneExtra', { e: P });
+  else m = (d === 'too-high' ? t('growHigh') : t('growLow')) + ' ' + t('growHint', { b: b });
+  growFb('bad', m);
+  try { $('#gGuess').focus(); $('#gGuess').select(); } catch (e) {}
+}
+function renderGrow(host) {
+  var s = STORIES[GR.s], max = s.max;
+  host.innerHTML =
+    '<div class="card"><p class="lead">' + t('growLead') + '</p>' +
+    '<div class="storypick" role="group" aria-label="' + t('pickStory') + '">' + STORIES.map(function (x, i) {
+      return '<button type="button" class="chipbtn' + (i === GR.s ? ' on' : '') + '" data-s="' + i + '" aria-pressed="' + (i === GR.s) + '">' + x.em + ' ' + t('story_' + x.id + '_title') + '</button>';
+    }).join('') + '</div>' +
+    '<p class="storytext">' + t('story_' + s.id + '_text') + '</p></div>' +
+    '<div class="card stage"><div class="ghead" id="gHead"></div>' +
+    '<label class="sliderlab">' + t('story_' + s.id + '_step') + ' <output id="gSlideVal">' + GR.n + '</output>' +
+    '<input type="range" id="gSlide" min="0" max="' + max + '" value="' + GR.n + '" aria-label="' + t('story_' + s.id + '_step') + '"></label>' +
+    '<div id="gList"></div></div>' +
+    '<div class="card"><h2>' + t('cmpTitle') + '</h2><div id="gCmp"></div></div>' +
+    '<div class="card"><h2>' + t('predictTitle') + '</h2><p>' + t('predictQ', { step: t('story_' + s.id + '_stepl'), n: GR.P, b: s.b, unit: t('story_' + s.id + '_unit') }) + '</p>' +
+    '<div class="numrow"><input id="gGuess" class="numin" type="text" inputmode="numeric" autocomplete="off" aria-label="' + t('answerLabel') + '"><button type="button" class="btn primary" id="gCheck">' + t('check') + '</button></div>' +
+    '<div class="fb" id="gFb" role="status" aria-live="polite"></div></div>';
+  on(host, '[data-s]', 'click', function (el) {
+    GR.s = +el.getAttribute('data-s'); GR.n = Math.min(GR.n, STORIES[GR.s].max); newPredict();
+    logEvent('story', 'grow-' + STORIES[GR.s].id, '', null, '');
+    renderGrow(host);
+  });
+  $('#gSlide').addEventListener('input', function () { GR.n = +this.value; updateGrow(); });
+  $('#gCheck').addEventListener('click', predictCheck);
+  $('#gGuess').addEventListener('keydown', function (e) { if (e.key === 'Enter') predictCheck(); });
+  updateGrow();
+}
+
+/* =====================================================================
+   TAB 4 - Special cases (zero pattern, powers of ten, negatives)
+   ===================================================================== */
+var Z = { b: 2, shown: 1, zero: false, solved: false, tries: 0 };
+var TZ = { n: 6 };
+var CH = { b: 3, e: 2, open: false };
+
+function zeroHTML() {
+  var b = Z.b, rows = '';
+  for (var i = 0; i < Z.shown; i++) {
+    var k = 5 - i;
+    if (i > 0) rows += '<li class="zdiv" aria-hidden="true">÷ ' + b + '</li>';
+    rows += '<li class="zrow"><span class="zp">' + powHTML(b, k) + '</span><span class="zeq">= ' + fmt(Math.pow(b, k)) + '</span>' +
+      (k === 1 ? '<span class="znote">' + t('zeroOne', { b: b }) + '</span>' : '') + '</li>';
+  }
+  if (Z.zero) {
+    if (Z.solved) rows += '<li class="zdiv" aria-hidden="true">÷ ' + b + '</li><li class="zrow solved"><span class="zp">' + powHTML(b, 0) + '</span><span class="zeq">= 1</span></li>';
+    else rows += '<li class="zdiv" aria-hidden="true">÷ ' + b + '</li><li class="zrow ask"><span class="zp">' + powHTML(b, 0) + '</span><span class="zeq">=</span>' +
+      '<input id="zIn" class="numin small" type="text" inputmode="numeric" autocomplete="off" aria-label="' + t('answerLabel') + '"><button type="button" class="btn primary small" id="zCheck">' + t('check') + '</button></li>';
+  }
+  return '<ol class="zlist">' + rows + '</ol>';
+}
+function zeroCtl() {
+  if (Z.zero) return '';
+  return '<button type="button" class="btn primary" id="zNext">' + (Z.shown < 5 ? t('zeroNext', { b: Z.b }) : t('zeroAsk', { b: Z.b })) + '</button>';
+}
+function updateZero() {
+  $('#zOut').innerHTML = zeroHTML();
+  $('#zCtl').innerHTML = zeroCtl();
+  var zn = $('#zNext'); if (zn) zn.addEventListener('click', function () {
+    if (Z.shown < 5) Z.shown++; else Z.zero = true;
+    updateZero();
+    if (Z.zero) { var zi = $('#zIn'); if (zi) try { zi.focus(); } catch (e) {} }
+  });
+  var zc = $('#zCheck'); if (zc) {
+    var run = function () {
+      var v = parseNum($('#zIn').value); if (v !== v) { $('#zFb').className = 'fb bad'; $('#zFb').innerHTML = t('typeNumber'); return; }
+      Z.tries++;
+      var ok = v === 1, d = ok ? 'correct' : (v === 0 ? 'zero' : (v === Z.b ? 'chose-base' : 'other'));
+      logEvent('zero-power', 'rules-zero', Z.b + '^0', ok, d + ' | ' + v, ok ? Math.max(1, 4 - Z.tries) : null);
+      if (ok) { Z.solved = true; updateZero(); $('#zFb').className = 'fb good'; $('#zFb').innerHTML = '<strong>' + t('right') + '</strong> ' + t('zeroRule', { b: Z.b }); }
+      else { $('#zFb').className = 'fb bad'; $('#zFb').innerHTML = d === 'zero' ? t('zeroNotZero', { b: Z.b }) : t('zeroTry', { b: Z.b }); try { $('#zIn').focus(); $('#zIn').select(); } catch (e) {} }
+    };
+    zc.addEventListener('click', run);
+    $('#zIn').addEventListener('keydown', function (e) { if (e.key === 'Enter') run(); });
+  }
+}
+function tenHTML() {
+  var n = TZ.n, s = fmt(Math.pow(10, n)), out = '';
+  for (var i = 0; i < s.length; i++) out += s.charAt(i) === '0' ? '<span class="z">0</span>' : s.charAt(i);
+  return '<div class="tenrow">' + powHTML(10, n) + ' <span class="eqs">=</span> <span class="tennum">' + out + '</span></div><p class="muted">' + t('tenZeros', { n: n }) + '</p>';
+}
+function chalHTML() {
+  var b = CH.b, e = CH.e, neg = Math.pow(-b, e), mn = -Math.pow(b, e), parts = [];
+  for (var i = 0; i < e; i++) parts.push('(−' + b + ')');
+  return '<div class="cmpgrid"><div class="cmpcell"><div class="cmph">' + powHTML('(−' + b + ')', e) + '</div><div class="cmpb">' + parts.join(' ' + MIX + ' ') + ' = <span class="val">' + fmt(neg) + '</span></div><p class="muted">' + t('negWhy1') + '</p></div>' +
+    '<div class="cmpcell"><div class="cmph">−' + powHTML(b, e) + '</div><div class="cmpb">−(' + chainText(b, e) + ') = <span class="val">' + fmt(mn) + '</span></div><p class="muted">' + t('negWhy2') + '</p></div></div>' +
+    '<p class="warn">' + t('negRule') + '</p>';
+}
+function renderRules(host) {
+  host.innerHTML =
+    '<div class="card"><h2>' + t('zeroTitle') + '</h2><p>' + t('zeroLead') + '</p>' +
+    '<div class="storypick" role="group" aria-label="' + t('base') + '">' + [2, 3, 5, 10].map(function (x) {
+      return '<button type="button" class="chipbtn' + (x === Z.b ? ' on' : '') + '" data-zb="' + x + '" aria-pressed="' + (x === Z.b) + '">' + t('base') + ' ' + x + '</button>';
+    }).join('') + '</div><div id="zOut"></div><div id="zCtl" class="qactions"></div><div class="fb" id="zFb" role="status" aria-live="polite"></div></div>' +
+    '<div class="card"><h2>' + t('tenTitle') + '</h2>' + stepperHTML('tn', t('exponent'), 'se', TZ.n) + '<div id="tOut"></div></div>' +
+    '<div class="card"><h2>' + t('oneTitle') + '</h2><p>' + t('oneText', { ex: powHTML(1, 5) + ' = 1 ' + MIX + ' 1 ' + MIX + ' 1 ' + MIX + ' 1 ' + MIX + ' 1 = 1' }) + '</p></div>' +
+    '<details class="card chal" id="chal"' + (CH.open ? ' open' : '') + '><summary>' + t('chalTitle') + '</summary><p>' + t('chalLead') + '</p>' +
+    '<div class="ctrls">' + stepperHTML('cb', t('base'), 'sb', CH.b) + stepperHTML('ce', t('exponent'), 'se', CH.e) + '</div><div id="cOut"></div></details>';
+  on(host, '[data-zb]', 'click', function (el) {
+    Z.b = +el.getAttribute('data-zb'); Z.shown = 1; Z.zero = false; Z.solved = false; Z.tries = 0; renderRules(host);
+    logEvent('zero-base', 'rules-zero', Z.b + '^0', null, '');
+  });
+  on(host, '.sbtn', 'click', function (el) {
+    var k = el.getAttribute('data-k'), d = +el.getAttribute('data-d');
+    if (k === 'tn') { TZ.n = Math.max(1, Math.min(9, TZ.n + d)); $('#v-tn').textContent = TZ.n; $('#tOut').innerHTML = tenHTML(); }
+    if (k === 'cb') { CH.b = Math.max(2, Math.min(9, CH.b + d)); $('#v-cb').textContent = CH.b; $('#cOut').innerHTML = chalHTML(); }
+    if (k === 'ce') { CH.e = Math.max(2, Math.min(5, CH.e + d)); $('#v-ce').textContent = CH.e; $('#cOut').innerHTML = chalHTML(); }
+  });
+  $('#chal').addEventListener('toggle', function () { CH.open = this.open; if (this.open) logEvent('challenge-open', 'rules-negatives', '', null, ''); });
+  $('#tOut').innerHTML = tenHTML();
+  $('#cOut').innerHTML = chalHTML();
+  updateZero();
+}
+
+/* =====================================================================
+   TAB 5 - Order of operations (click what to do first)
+   ===================================================================== */
+var OR = { level: 1, expr: null, work: null, pending: null, hint: null, errors: 0, tries: 0, done: false };
+
+function newOrder() {
+  var x = makeExpr(OR.level);
+  OR.expr = x; OR.work = cloneList(x.tokens); normalize(OR.work);
+  OR.pending = null; OR.hint = null; OR.errors = 0; OR.tries = 0; OR.done = false;
+  logEvent('order-new', 'order-L' + OR.level, tokText(x.tokens), null, '');
+}
+function orderFb(kind, html) { var el = $('#oFb'); el.className = 'fb ' + kind; el.innerHTML = html; }
+function drawOrder() {
+  var box = $('#oExpr');
+  var act = findAction(OR.work);
+  box.innerHTML = tokHTML(OR.work, { live: !OR.done && !OR.pending, pending: OR.pending ? OR.pending.list[OR.pending.idx].id : null, hint: OR.hint });
+  var step = $('#oStep');
+  if (OR.done) {
+    var stars3 = OR.errors === 0 ? 3 : (OR.errors <= 2 ? 2 : 1);
+    step.innerHTML = '<div class="answerline">' + t('oAnswer') + ' <span class="val">' + OR.work[0].v + '</span> <span class="starz">' + stars(stars3) + '</span></div>' +
+      '<div class="qactions"><button type="button" class="btn primary" id="oNew">' + t('oNext') + '</button></div>';
+    $('#oNew').addEventListener('click', function () { newOrder(); drawOrder(); orderFb('', ''); });
+    try { $('#oNew').focus(); } catch (e) {}
+    return;
+  }
+  if (OR.pending) {
+    var a = OR.pending;
+    step.innerHTML = '<div class="numrow"><span class="calc">' + actDesc(a) + ' =</span><input id="oIn" class="numin small" type="text" inputmode="numeric" autocomplete="off" aria-label="' + t('answerLabel') + '"><button type="button" class="btn primary" id="oCheck">' + t('check') + '</button></div>';
+    var run = function () { checkOrderValue(); };
+    $('#oCheck').addEventListener('click', run);
+    $('#oIn').addEventListener('keydown', function (e) { if (e.key === 'Enter') run(); });
+    try { $('#oIn').focus(); } catch (e) {}
+    return;
+  }
+  step.innerHTML = '<p class="oprompt">' + (act ? t('oClick') : '') + '</p>';
+}
+function clickOrder(id) {
+  if (OR.done || OR.pending) return;
+  var act = findAction(OR.work), hit = locate(OR.work, id);
+  if (!act || !hit) return;
+  OR.hint = null;
+  var target = act.list[act.idx];
+  var item = tokText(OR.expr.tokens), sec = 'order-L' + OR.level;
+  if (hit.list === act.list && hit.idx === act.idx) {
+    OR.pending = act;
+    logEvent('step-click', sec, item, true, act.kind);
+    orderFb('good', '<strong>' + t('right') + '</strong> ' + t('oWhy_' + act.kind));
+    drawOrder();
+    return;
+  }
+  OR.errors++;
+  var clicked = hit.list[hit.idx], diag;
+  if (hit.list !== act.list) diag = 'skipped-parentheses';
+  else if (act.kind === 'pow') diag = clicked.t === 'o' ? 'skipped-exponent' : 'wrong-order-left-to-right';
+  else if (act.kind === 'mul') diag = clicked.t === 'o' && clicked.v !== MIX ? 'skipped-multiplication' : 'wrong-order-left-to-right';
+  else diag = 'wrong-order-left-to-right';
+  logEvent('step-click', sec, item, false, diag);
+  orderFb('bad', t('oFb_' + diag));
+}
+function checkOrderValue() {
+  var act = OR.pending, v = parseNum($('#oIn').value), want = actValue(act);
+  var item = tokText(OR.expr.tokens), sec = 'order-L' + OR.level;
+  if (v !== v) { orderFb('bad', t('typeNumber')); return; }
+  OR.tries++;
+  var ok = v === want;
+  logEvent('step-value', sec, actDesc(act).replace(/<[^>]+>/g, ''), ok, ok ? 'correct' : 'wrong | ' + v);
+  if (!ok) {
+    OR.errors++;
+    var m = act.kind === 'pow' ? t('oValPow', { chain: chainHTML(act.list[act.idx].b.v, act.list[act.idx].e) }) : t('oValOp');
+    orderFb('bad', m);
+    try { $('#oIn').focus(); $('#oIn').select(); } catch (e) {}
+    return;
+  }
+  applyAct(act, want); normalize(OR.work);
+  OR.pending = null; OR.tries = 0;
+  if (OR.work.length === 1 && OR.work[0].t === 'n') {
+    OR.done = true;
+    var s3 = OR.errors === 0 ? 3 : (OR.errors <= 2 ? 2 : 1);
+    logEvent('problem-complete', sec, item, true, 'errors:' + OR.errors, s3);
+    orderFb('good', '<strong>' + t('right') + '</strong> ' + t('oDone'));
+  } else orderFb('', '');
+  drawOrder();
+}
+function renderOrder(host) {
+  if (!OR.expr) newOrder();
+  host.innerHTML =
+    '<div class="card"><p class="lead">' + t('orderLead') + '</p>' +
+    '<ol class="rank"><li><b>1</b> ' + t('rank1') + '</li><li class="r2"><b>2</b> ' + t('rank2') + '</li><li><b>3</b> ' + t('rank3') + '</li><li><b>4</b> ' + t('rank4') + '</li></ol>' +
+    '<div class="storypick" role="group" aria-label="' + t('level') + '">' + [1, 2, 3].map(function (l) {
+      return '<button type="button" class="chipbtn' + (l === OR.level ? ' on' : '') + '" data-l="' + l + '" aria-pressed="' + (l === OR.level) + '">' + t('level') + ' ' + l + '</button>';
+    }).join('') + '</div></div>' +
+    '<div class="card stage"><div class="exprbox" id="oExpr" aria-live="polite"></div><div id="oStep"></div><div class="fb" id="oFb" role="status" aria-live="polite"></div>' +
+    '<div class="qactions"><button type="button" class="btn" id="oHint">💡 ' + t('oShow') + '</button><button type="button" class="btn" id="oSkip">' + t('oNew') + '</button></div></div>';
+  on(host, '[data-l]', 'click', function (el) { OR.level = +el.getAttribute('data-l'); newOrder(); renderOrder(host); });
+  $('#oHint').addEventListener('click', function () {
+    if (OR.done || OR.pending) return;
+    var a = findAction(OR.work); if (!a) return;
+    OR.hint = a.list[a.idx].id;
+    logEvent('hint', 'order-L' + OR.level, tokText(OR.expr.tokens), null, a.kind);
+    orderFb('hint', t('oHint_' + a.kind));
+    drawOrder();
+  });
+  $('#oSkip').addEventListener('click', function () { newOrder(); drawOrder(); orderFb('', ''); });
+  var box = $('#oExpr');
+  box.addEventListener('click', function (e) { var tk = e.target.closest('.tk'); if (tk) clickOrder(+tk.getAttribute('data-id')); });
+  box.addEventListener('keydown', function (e) {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    var tk = e.target.closest('.tk'); if (tk) { e.preventDefault(); clickOrder(+tk.getAttribute('data-id')); }
+  });
+  drawOrder();
+}
+
+/* =====================================================================
+   TAB 6 - Practice
+   ===================================================================== */
+var PR = { level: 0 };
+var LEVELS = [
+  { id: 1, key: 'lvl1', make: practiceL1 },
+  { id: 2, key: 'lvl2', make: practiceL2 },
+  { id: 3, key: 'lvl3', make: practiceL3 }
+];
+function renderPractice(host) {
+  if (!PR.level) {
+    host.innerHTML = '<div class="card"><p class="lead">' + t('practiceLead') + '</p><div class="lvlgrid">' + LEVELS.map(function (l) {
+      return '<button type="button" class="lvl" data-lv="' + l.id + '"><span class="lvlnum">' + l.id + '</span><span class="lvlname">' + t(l.key) + '</span><span class="lvldesc">' + t(l.key + 'd') + '</span></button>';
+    }).join('') + '</div></div>';
+    on(host, '[data-lv]', 'click', function (el) { PR.level = +el.getAttribute('data-lv'); logEvent('level', 'practice-L' + PR.level, '', null, ''); renderPractice(host); });
+    return;
+  }
+  var lv = LEVELS[PR.level - 1];
+  host.innerHTML = '<div class="card"><div class="rowhead"><h2>' + t('level') + ' ' + lv.id + ': ' + t(lv.key) + '</h2><button type="button" class="btn small" id="pBack">' + t('chooseLevel') + '</button></div><div id="pQuiz" class="quiz"></div></div>';
+  $('#pBack').addEventListener('click', function () { PR.level = 0; renderPractice(host); });
+  runSet($('#pQuiz'), lv.make(), {
+    section: 'practice-L' + lv.id,
+    actions: function (st) {
+      var a = [{ label: t('again'), cls: 'primary', fn: function () { renderPractice(host); } }];
+      if (lv.id < 3) a.push({ label: t('nextLevel'), fn: function () { PR.level = lv.id + 1; renderPractice(host); } });
+      a.push({ label: t('chooseLevel'), fn: function () { PR.level = 0; renderPractice(host); } });
+      return a;
+    }
+  });
+}
+
+/* =====================================================================
+   App shell: tabs, language, student bar
+   ===================================================================== */
+var TABS = [
+  { id: 'build', key: 'tabBuild', render: renderBuild },
+  { id: 'words', key: 'tabWords', render: renderWords },
+  { id: 'grow', key: 'tabGrow', render: renderGrow },
+  { id: 'rules', key: 'tabRules', render: renderRules },
+  { id: 'order', key: 'tabOrder', render: renderOrder },
+  { id: 'practice', key: 'tabPractice', render: renderPractice }
+];
+var dirty = {};
+function drawTabs() {
+  $('#tabs').innerHTML = TABS.map(function (tb) {
+    var on_ = tb.id === S.tab;
+    return '<button type="button" role="tab" class="tab' + (on_ ? ' on' : '') + '" id="tab-' + tb.id + '" aria-selected="' + on_ + '" aria-controls="p-' + tb.id + '" data-tab="' + tb.id + '">' + t(tb.key) + '</button>';
+  }).join('');
+  on($('#tabs'), '.tab', 'click', function (el) { showTab(el.getAttribute('data-tab'), true); });
+}
+function showTab(id, user) {
+  S.tab = id; clearTimers();
+  if (window.speechSynthesis) { try { window.speechSynthesis.cancel(); } catch (e) {} }
+  TABS.forEach(function (tb) {
+    var p = $('#p-' + tb.id);
+    p.hidden = tb.id !== id;
+    if (tb.id === id) { p.innerHTML = ''; tb.render(p); } else p.innerHTML = '';
+  });
+  drawTabs();
+  if (user) logEvent('tab', id, '', null, '');
+}
+function applyStatic() {
+  $$('[data-i18n]').forEach(function (el) { el.textContent = t(el.getAttribute('data-i18n')); });
+  $$('[data-i18n-ph]').forEach(function (el) { el.setAttribute('placeholder', t(el.getAttribute('data-i18n-ph'))); });
+  document.documentElement.setAttribute('lang', S.lang);
+  $$('.lang button').forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-lang') === S.lang)); });
+  updateWho();
+}
+function setLang(l, user) {
+  S.lang = l;
+  try { localStorage.setItem(LKEY, l); } catch (e) {}
+  applyStatic(); showTab(S.tab, false);
+  if (user) logEvent('language', '', l, null, '');
+}
+function initApp() {
+  $('#sName').value = student.name; $('#sPeriod').value = student.period;
+  $('#sName').addEventListener('input', function () { student.name = this.value; saveStudent(); updateWho(); });
+  $('#sPeriod').addEventListener('input', function () { student.period = this.value; saveStudent(); });
+  $('#sReset').addEventListener('click', function () {
+    student.name = ''; student.period = ''; saveStudent();
+    $('#sName').value = ''; $('#sPeriod').value = '';
+    hasLoggedStart = false; PR.level = 0; OR.expr = null; GR.n = 3; newPredict(); Z.shown = 1; Z.zero = false; Z.solved = false;
+    updateWho(); showTab(S.tab, false);
+    try { $('#sName').focus(); } catch (e) {}
+  });
+  on(document, '.lang button', 'click', function (el) { setLang(el.getAttribute('data-lang'), true); });
+  newPredict();
+  applyStatic();
+  showTab('build', false);
+}
+initApp();
+
+})();
+
+</script>
+</body>
+</html>
